@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn Tập Giữa Kì 1 Hóa & Sinh 12 - TM Nguyễn Ngọc Hồng</title>
+    <title>Ôn Tập Giữa Kì 1 Hóa Học 12</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        sub, sup { font-size: 0.75em; vertical-align: baseline; position: relative; }
-        sub { bottom: -0.25em; }
-        sup { top: -0.5em; }
+        /* CSS tuỳ chỉnh để định dạng số nhỏ hóa học nếu cần */
+        sub { font-size: 0.75em; vertical-align: baseline; position: relative; bottom: -0.25em; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
@@ -19,13 +18,13 @@
     <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-xl font-bold text-cyan-400">ÔN TẬP GIỮA KÌ I - HÓA & SINH 12</h1>
-                <p class="text-xs text-slate-400">Trường TH THCS&THPT Lê Thánh Tông — TM Nguyễn Ngọc Hồng</p>
+                <h1 class="text-xl font-bold text-cyan-400">ÔN TẬP GIỮA KÌ I - HÓA HỌC 12</h1>
+                <p class="text-xs text-slate-400">Trường TH THCS&THPT Lê Thánh Tông</p>
             </div>
             <div id="score-board" class="hidden flex items-center gap-4 bg-slate-700 px-4 py-2 rounded-lg text-sm font-medium">
                 <div>Đúng: <span id="correct-count" class="text-emerald-400 font-bold">0</span></div>
                 <div>Sai: <span id="incorrect-count" class="text-rose-400 font-bold">0</span></div>
-                <div>Tiến độ: <span id="progress-count" class="text-cyan-400 font-bold">0/0</span></div>
+                <div>Tiến độ: <span id="progress-count" class="text-cyan-400 font-bold">0/58</span></div>
             </div>
         </div>
     </header>
@@ -33,51 +32,47 @@
     <!-- Main Container -->
     <main class="flex-grow max-w-3xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
 
-        <!-- Welcome View: Chọn môn ôn tập -->
+        <!-- Welcome View -->
         <div id="welcome-view" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 shadow-xl text-center">
-            <div class="w-16 h-16 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold border border-cyan-500/20">📚</div>
-            <h2 class="text-2xl font-bold mb-2">Chọn Môn Ôn Tập Giữa Kì 1</h2>
+            <div class="w-16 h-16 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold border border-cyan-500/20">🧪</div>
+            <h2 class="text-2xl font-bold mb-2">Nền Tảng Ôn Tập Hóa Học 12</h2>
             <p class="text-slate-400 mb-6 max-w-lg mx-auto text-sm sm:text-base">
-                Hệ thống bao gồm đầy đủ Trắc nghiệm nhiều lựa chọn, Đúng/Sai và Trả lời ngắn của cả Hóa học và Sinh học 12. Chọn môn bạn muốn ôn:
+                Hệ thống ôn tập các câu hỏi trắc nghiệm (Phần I, II, III từ câu 1 đến câu 58) với công thức hóa học hiển thị chuẩn xác, đẹp mắt. Bấm chọn đáp án để ghi nhận kết quả ngay lập tức!
             </p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <button onclick="startQuiz('hoa')" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold p-5 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer flex flex-col items-center gap-2">
-                    <span class="text-2xl">🧪</span>
-                    <span>Môn Hóa Học</span>
-                    <span class="text-xs font-normal opacity-80">(MCQ, Đúng/Sai, Short)</span>
+            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                <button onclick="startQuiz('all')" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/20 cursor-pointer">
+                    Làm toàn bộ trắc nghiệm (58 câu)
                 </button>
-                <button onclick="startQuiz('sinh')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold p-5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer flex flex-col items-center gap-2">
-                    <span class="text-2xl">🧬</span>
-                    <span>Môn Sinh Học</span>
-                    <span class="text-xs font-normal opacity-80">(MCQ, Đúng/Sai, Short)</span>
+                <button onclick="startQuiz('part1')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-5 py-3 rounded-xl transition border border-slate-600 cursor-pointer">
+                    Phần I: 4 lựa chọn (30 câu)
                 </button>
-                <button onclick="startQuiz('all')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium p-5 rounded-xl transition border border-slate-600 cursor-pointer flex flex-col items-center gap-2">
-                    <span class="text-2xl">⚡</span>
-                    <span>Cả Hai Môn</span>
-                    <span class="text-xs font-normal opacity-60">(Tổng hợp đầy đủ)</span>
-                </button>
+            </div>
+            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                <button onclick="startQuiz('part2')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-slate-300 border border-slate-600 cursor-pointer">Phần II: Đúng/Sai (31-38)</button>
+                <button onclick="startQuiz('part3')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-slate-300 border border-slate-600 cursor-pointer">Phần III: Trả lời ngắn (39-58)</button>
             </div>
         </div>
 
         <!-- Quiz View -->
         <div id="quiz-view" class="hidden flex flex-col gap-6">
+            <!-- Question Card -->
             <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
                     <span id="question-tag" class="text-xs font-semibold px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20"></span>
                     <span id="question-progress" class="text-xs text-slate-400 font-medium"></span>
                 </div>
+                <!-- Sử dụng innerHTML để hiển thị thẻ <sub> chuẩn -->
                 <div id="question-text" class="text-lg sm:text-xl font-medium text-slate-100 mb-6 leading-relaxed"></div>
 
-                <!-- 1. Options Container (Dành cho Trắc nghiệm MCQ) -->
-                <div id="options-container" class="flex flex-col gap-3"></div>
+                <!-- Options Container -->
+                <div id="options-container" class="flex flex-col gap-3">
+                    <!-- Dynamic Options -->
+                </div>
 
-                <!-- 2. True/False Container (Dành cho phần Đúng / Sai 4 ý a, b, c, d) -->
-                <div id="tf-container" class="hidden flex flex-col gap-4"></div>
-
-                <!-- 3. Short Answer Container (Dành cho Trả lời ngắn / Tính toán) -->
+                <!-- Short Answer Container -->
                 <div id="input-container" class="hidden flex flex-col gap-4">
                     <div class="flex gap-3">
-                        <input type="text" id="user-short-input" placeholder="Nhập đáp án của bạn..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500">
+                        <input type="text" id="user-short-input" placeholder="Nhập câu trả lời ngắn của bạn..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500">
                         <button onclick="submitShortAnswer()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold px-6 py-3 rounded-xl transition cursor-pointer">Gửi đáp án</button>
                     </div>
                 </div>
@@ -94,9 +89,6 @@
                 <button onclick="prevQuestion()" id="prev-btn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-5 py-2.5 rounded-xl font-medium transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                     ← Câu trước
                 </button>
-                <button onclick="changeSubjectHome()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer">
-                    🏠 Chọn môn khác
-                </button>
                 <button onclick="nextQuestion()" id="next-btn" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold px-6 py-2.5 rounded-xl transition cursor-pointer">
                     Câu tiếp theo →
                 </button>
@@ -107,7 +99,7 @@
         <div id="result-view" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-xl text-center">
             <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold border border-emerald-500/20">🏆</div>
             <h2 class="text-2xl font-bold mb-2">Hoàn Thành Ôn Tập!</h2>
-            <p class="text-slate-400 mb-6">Bạn đã hoàn thành phần luyện tập các dạng câu hỏi.</p>
+            <p class="text-slate-400 mb-6">Bạn đã hoàn thành các phần trắc nghiệm ôn tập giữa kì 1 môn Hóa học 12.</p>
             <div class="flex justify-center gap-6 mb-8">
                 <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl w-32">
                     <div class="text-2xl font-bold text-emerald-400" id="final-correct">0</div>
@@ -119,82 +111,562 @@
                 </div>
             </div>
             <button onclick="resetApp()" class="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold px-6 py-3 rounded-xl transition cursor-pointer shadow-lg shadow-cyan-500/20">
-                Chọn môn khác / Làm lại
+                Làm lại từ đầu
             </button>
         </div>
 
     </main>
 
+    <!-- Footer -->
     <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-800 mt-auto">
-        Nền tảng Ôn tập Hóa & Sinh 12 - TM Nguyễn Ngọc Hồng
+        Nền tảng Ôn tập Hóa học 12 - Trường TH THCS&THPT Lê Thánh Tông
     </footer>
 
+    <!-- Script Data & Logic -->
     <script>
         const questionsData = [
-            // --- MÔN HÓA HỌC 12 ---
+            // PHẦN I: Trắc nghiệm nhiều lựa chọn (1-30)
             {
-                id: 1, subject: "hoa", type: "mcq", category: "Môn Hóa học - Trắc nghiệm nhiều lựa chọn",
-                question: "Stearic acid có công thức hóa học là",
+                id: 1, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 1. Stearic acid có công thức là",
                 options: [
                     { text: "C<sub>17</sub>H<sub>31</sub>COOH", isCorrect: false },
                     { text: "C<sub>17</sub>H<sub>33</sub>COOH", isCorrect: false },
                     { text: "C<sub>15</sub>H<sub>31</sub>COOH", isCorrect: false },
                     { text: "C<sub>17</sub>H<sub>35</sub>COOH", isCorrect: true }
                 ],
-                rationale: "Stearic acid là acid béo no mạch hở, có công thức C<sub>17</sub>H<sub>35</sub>COOH."
+                rationale: "Stearic acid là acid béo no có công thức C<sub>17</sub>H<sub>35</sub>COOH."
             },
             {
-                id: 2, subject: "hoa", type: "tf", category: "Môn Hóa học - Đúng / Sai",
-                question: "Cho các phát biểu về chất béo và ester:",
-                statements: [
-                    { text: "Chất béo là triester của glycerol với các acid béo.", isTrue: true },
-                    { text: "Tristearin là chất béo no, ở trạng thái rắn ở điều kiện thường.", isTrue: true },
-                    { text: "Các ester đều tan tốt trong nước và nhẹ hơn nước.", isTrue: false },
-                    { text: "Phản ứng thủy phân ester trong môi trường kiềm là phản ứng một chiều.", isTrue: false }
+                id: 2, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 2. Palmitic acid có công thức là",
+                options: [
+                    { text: "C<sub>17</sub>H<sub>31</sub>COOH", isCorrect: false },
+                    { text: "C<sub>17</sub>H<sub>33</sub>COOH", isCorrect: false },
+                    { text: "C<sub>15</sub>H<sub>31</sub>COOH", isCorrect: true },
+                    { text: "C<sub>17</sub>H<sub>35</sub>COOH", isCorrect: false }
                 ],
-                rationale: "a) Đúng, định nghĩa chất béo. b) Đúng, tristearin no nên ở thể rắn. c) Sai, ester ít tan trong nước. d) Sai, xà phòng hóa là phản ứng một chiều nhưng ester nói chung thủy phân thuận nghịch."
+                rationale: "Palmitic acid là acid béo no có công thức C<sub>15</sub>H<sub>31</sub>COOH."
             },
             {
-                id: 3, subject: "hoa", type: "short", category: "Môn Hóa học - Trả lời ngắn",
-                question: "Khi xà phòng hóa hoàn toàn 1 mol tristearin ((C<sub>17</sub>H<sub>35</sub>COO)<sub>3</sub>C<sub>3</sub>H<sub>5</sub>) bằng dung dịch NaOH dư, số mol glycerol thu được là bao nhiêu?",
-                answer: "1",
-                rationale: "Phương trình: (C<sub>17</sub>H<sub>35</sub>COO)<sub>3</sub>C<sub>3</sub>H<sub>5</sub> + 3NaOH -> 3C<sub>17</sub>H<sub>35</sub>COONa + C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>. Tỉ lệ mol là 1 : 1."
+                id: 3, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 3. Oleic acid có công thức là",
+                options: [
+                    { text: "C<sub>17</sub>H<sub>31</sub>COOH", isCorrect: false },
+                    { text: "C<sub>17</sub>H<sub>33</sub>COOH", isCorrect: true },
+                    { text: "C<sub>15</sub>H<sub>31</sub>COOH", isCorrect: false },
+                    { text: "C<sub>17</sub>H<sub>35</sub>COOH", isCorrect: false }
+                ],
+                rationale: "Oleic acid là acid béo không no có 1 liên kết đôi C=C, công thức C<sub>17</sub>H<sub>33</sub>COOH."
+            },
+            {
+                id: 4, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 4. Số nguyên tử carbon trong phân tử glucose là",
+                options: [
+                    { text: "12", isCorrect: false },
+                    { text: "22", isCorrect: false },
+                    { text: "6", isCorrect: true },
+                    { text: "11", isCorrect: false }
+                ],
+                rationale: "Glucose là monosaccharide có công thức phân tử C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, gồm 6 nguyên tử C."
+            },
+            {
+                id: 5, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 5. Số nguyên tử hydrogen trong phân tử glucose là",
+                options: [
+                    { text: "12", isCorrect: true },
+                    { text: "22", isCorrect: false },
+                    { text: "6", isCorrect: false },
+                    { text: "11", isCorrect: false }
+                ],
+                rationale: "Glucose có công thức C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, chứa 12 nguyên tử hydrogen."
+            },
+            {
+                id: 6, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 6. Số nguyên tử hydrogen trong phân tử saccharose là",
+                options: [
+                    { text: "12", isCorrect: false },
+                    { text: "22", isCorrect: true },
+                    { text: "6", isCorrect: false },
+                    { text: "11", isCorrect: false }
+                ],
+                rationale: "Saccharose là disaccharide có công thức phân tử C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>, chứa 22 nguyên tử hydrogen."
+            },
+            {
+                id: 7, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 7. Amine nào sau đây là amine bậc ba?",
+                options: [
+                    { text: "Trimethylamine", isCorrect: true },
+                    { text: "Methylamine", isCorrect: false },
+                    { text: "Dimethylamine", isCorrect: false },
+                    { text: "Ethylamine", isCorrect: false }
+                ],
+                rationale: "Trimethylamine (N(CH<sub>3</sub>)<sub>3</sub>) có nguyên tử N liên kết với 3 gốc hydrocarbon nên là amine bậc ba."
+            },
+            {
+                id: 8, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 8. Amine nào sau đây là amine bậc hai?",
+                options: [
+                    { text: "Trimethylamine", isCorrect: false },
+                    { text: "Methylamine", isCorrect: false },
+                    { text: "Dimethylamine", isCorrect: true },
+                    { text: "Ethylamine", isCorrect: false }
+                ],
+                rationale: "Dimethylamine ((CH<sub>3</sub>)<sub>2</sub>NH) có nguyên tử N liên kết với 2 gốc hydrocarbon nên là amine bậc hai."
+            },
+            {
+                id: 9, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 9. Chất nào sau đây là amino acid?",
+                options: [
+                    { text: "Aniline", isCorrect: false },
+                    { text: "Glycine", isCorrect: true },
+                    { text: "Acetic acid", isCorrect: false },
+                    { text: "Glycerol", isCorrect: false }
+                ],
+                rationale: "Glycine (H<sub>2</sub>NCH<sub>2</sub>COOH) chứa đồng thời nhóm amino và nhóm carboxyl nên là amino acid."
+            },
+            {
+                id: 10, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 10. Chất nào sau đây là amino acid?",
+                options: [
+                    { text: "Aniline", isCorrect: false },
+                    { text: "Ethanol", isCorrect: false },
+                    { text: "Alanine", isCorrect: true },
+                    { text: "Glycerol", isCorrect: false }
+                ],
+                rationale: "Alanine là một amino acid phổ biến (CH<sub>3</sub>CH(NH<sub>2</sub>)COOH)."
+            },
+            {
+                id: 11, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 11. Chất nào sau đây không cho được phản ứng màu biuret?",
+                options: [
+                    { text: "Gly-Ala", isCorrect: true },
+                    { text: "Gly-Gly-Ala", isCorrect: false },
+                    { text: "Gly-Ala-Ala", isCorrect: false },
+                    { text: "Gly-Gly-Ala-Ala", isCorrect: false }
+                ],
+                rationale: "Phản ứng màu biuret là đặc trưng của peptide từ tripeptide trở lên. Gly-Ala là dipeptide nên không cho phản ứng màu biuret."
+            },
+            {
+                id: 12, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 12. Chất nào sau đây không cho được phản ứng màu biuret?",
+                options: [
+                    { text: "Ala-Ala", isCorrect: true },
+                    { text: "Ala-Gly-Ala", isCorrect: false },
+                    { text: "Gly-Ala-Ala", isCorrect: false },
+                    { text: "Gly-Gly-Ala-Ala", isCorrect: false }
+                ],
+                rationale: "Ala-Ala là dipeptide nên không cho phản ứng màu biuret."
+            },
+            {
+                id: 13, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 13. Ester nào sau đây tác dụng với dung dịch NaOH đun nóng tạo ra ethanol?",
+                options: [
+                    { text: "CH<sub>3</sub>COOCH<sub>3</sub>", isCorrect: false },
+                    { text: "HCOOC<sub>2</sub>H<sub>5</sub>", isCorrect: true },
+                    { text: "C<sub>2</sub>H<sub>3</sub>COOCH<sub>3</sub>", isCorrect: false },
+                    { text: "HCOOC<sub>2</sub>H<sub>3</sub>", isCorrect: false }
+                ],
+                rationale: "HCOOC<sub>2</sub>H<sub>5</sub> khi thủy phân trong NaOH sinh ra HCOONa và C<sub>2</sub>H<sub>5</sub>OH (ethanol)."
+            },
+            {
+                id: 14, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 14. Ester nào sau đây tác dụng với dung dịch NaOH đun nóng tạo ra methanol?",
+                options: [
+                    { text: "CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>", isCorrect: false },
+                    { text: "HCOOC<sub>2</sub>H<sub>5</sub>", isCorrect: false },
+                    { text: "C<sub>2</sub>H<sub>3</sub>COOCH<sub>3</sub>", isCorrect: true },
+                    { text: "HCOOC<sub>2</sub>H<sub>3</sub>", isCorrect: false }
+                ],
+                rationale: "C<sub>2</sub>H<sub>3</sub>COOCH<sub>3</sub> khi thủy phân sinh ra CH<sub>3</sub>OH (methanol)."
+            },
+            {
+                id: 15, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 15. Dung dịch nào sau đây không làm quỳ tím hóa xanh",
+                options: [
+                    { text: "Methylamine", isCorrect: false },
+                    { text: "Phenylamine", isCorrect: true },
+                    { text: "Dimethylamine", isCorrect: false },
+                    { text: "Ethylamine", isCorrect: false }
+                ],
+                rationale: "Phenylamine (aniline, C<sub>6</sub>H<sub>5</sub>NH<sub>2</sub>) có lực base rất yếu, không làm quỳ tím hóa xanh."
+            },
+            {
+                id: 16, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 16. Dung dịch nào sau đây làm quỳ tím hóa xanh",
+                options: [
+                    { text: "Methylamine", isCorrect: true },
+                    { text: "Phenylamine", isCorrect: false },
+                    { text: "Ethanol", isCorrect: false },
+                    { text: "Acetic acid", isCorrect: false }
+                ],
+                rationale: "Methylamine là amine mạch hở, có tính base làm quỳ tím hóa xanh."
+            },
+            {
+                id: 17, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 17. Chất nào sau đây làm mất màu nước Br<sub>2</sub>?",
+                options: [
+                    { text: "Saccharose", isCorrect: false },
+                    { text: "Fructose", isCorrect: false },
+                    { text: "Glucose", isCorrect: true },
+                    { text: "Cellulose", isCorrect: false }
+                ],
+                rationale: "Glucose có nhóm -CHO trong phân tử nên khử được nước bromine thành HBr, làm mất màu dung dịch Br<sub>2</sub>."
+            },
+            {
+                id: 18, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 18. Chất nào sau đây vừa tác dụng với dung dịch HCl, vừa tác dụng với dung dịch NaOH?",
+                options: [
+                    { text: "Glutamic acid", isCorrect: true },
+                    { text: "Aniline", isCorrect: false },
+                    { text: "Acetic acid", isCorrect: false },
+                    { text: "Ethylamine", isCorrect: false }
+                ],
+                rationale: "Glutamic acid là amino acid có tính lưỡng tính, vừa phản ứng với HCl vừa phản ứng với NaOH."
+            },
+            {
+                id: 19, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 19. Chất nào sau đây vừa tác dụng với dung dịch HCl, vừa tác dụng với dung dịch NaOH?",
+                options: [
+                    { text: "Ethanol", isCorrect: false },
+                    { text: "Alanine", isCorrect: true },
+                    { text: "Acetic acid", isCorrect: false },
+                    { text: "Ethylamine", isCorrect: false }
+                ],
+                rationale: "Alanine là amino acid có tính lưỡng tính, tác dụng được với cả HCl và NaOH."
+            },
+            {
+                id: 20, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 20. Chất nào sau đây được dùng để khử mùi tanh của cá do các amine gây ra?",
+                options: [
+                    { text: "Acetic acid", isCorrect: true },
+                    { text: "Ammonia", isCorrect: false },
+                    { text: "Ethyl alcohol", isCorrect: false },
+                    { text: "Acetaldehyde", isCorrect: false }
+                ],
+                rationale: "Mùi tanh của cá do các amine (tính base) gây ra nên dùng acid hữu cơ yếu như giấm ăn (chứa acetic acid) để khử."
+            },
+            {
+                id: 21, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 21. Ester X được tạo bởi acrylic acid và methanol. Công thức cấu tạo thu gọn của X là",
+                options: [
+                    { text: "CH<sub>3</sub>COOCH=CH<sub>2</sub>", isCorrect: false },
+                    { text: "CH<sub>2</sub>=CHCOOC<sub>2</sub>H<sub>5</sub>", isCorrect: false },
+                    { text: "CH<sub>2</sub>=CHCOOCH<sub>3</sub>", isCorrect: true },
+                    { text: "C<sub>2</sub>H<sub>5</sub>COOCH<sub>3</sub>", isCorrect: false }
+                ],
+                rationale: "Acrylic acid là CH<sub>2</sub>=CHCOOH và methanol là CH<sub>3</sub>OH, tạo ester CH<sub>2</sub>=CHCOOCH<sub>3</sub>."
+            },
+            {
+                id: 22, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 22. Ester X được tạo bởi acrylic acid và ethanol. Công thức cấu tạo thu gọn của X là",
+                options: [
+                    { text: "CH<sub>3</sub>COOCH=CH<sub>2</sub>", isCorrect: false },
+                    { text: "CH<sub>2</sub>=CHCOOC<sub>2</sub>H<sub>5</sub>", isCorrect: true },
+                    { text: "CH<sub>2</sub>=CHCOOCH<sub>3</sub>", isCorrect: false },
+                    { text: "C<sub>2</sub>H<sub>5</sub>COOCH<sub>3</sub>", isCorrect: false }
+                ],
+                rationale: "Acrylic acid (CH<sub>2</sub>=CHCOOH) và ethanol (C<sub>2</sub>H<sub>5</sub>OH) tạo ester CH<sub>2</sub>=CHCOOC<sub>2</sub>H<sub>5</sub>."
+            },
+            {
+                id: 23, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 23. Nung nóng 1 mol triglyceride X cần dùng tối đa 3 mol H<sub>2</sub> (xúc tác Ni). Số liên kết pi (π) trong phân tử của X là",
+                options: [
+                    { text: "3", isCorrect: false },
+                    { text: "5", isCorrect: false },
+                    { text: "4", isCorrect: false },
+                    { text: "6", isCorrect: true }
+                ],
+                rationale: "Triglyceride cấu tạo từ glycerol và 3 gốc acid béo. 1 mol X cộng tối đa 3 mol H<sub>2</sub> ở gốc hydrocarbon (3 liên kết đôi C=C). Ngoài ra trong nhóm chức ester (-COO-) có 3 liên kết pi. Tổng số liên kết pi = 3 + 3 = 6."
+            },
+            {
+                id: 24, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 24. Nung nóng 1 mol triglyceride X cần dùng tối đa 6 mol H<sub>2</sub> (xúc tác Ni). Số liên kết pi (π) trong phân tử của X là",
+                options: [
+                    { text: "3", isCorrect: false },
+                    { text: "9", isCorrect: true },
+                    { text: "4", isCorrect: false },
+                    { text: "6", isCorrect: false }
+                ],
+                rationale: "Cần tối đa 6 mol H<sub>2</sub> nghĩa là có 6 liên kết pi ở gốc hydrocarbon, cộng với 3 liên kết pi ở 3 nhóm -COO-. Tổng số liên kết pi = 6 + 3 = 9."
+            },
+            {
+                id: 25, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 25. Cellulose có công thức cấu tạo là",
+                options: [
+                    { text: "[C<sub>6</sub>H<sub>9</sub>O<sub>2</sub>(OH)<sub>3</sub>]<sub>n</sub>", isCorrect: false },
+                    { text: "[C<sub>6</sub>H<sub>7</sub>O<sub>3</sub>(OH)<sub>2</sub>]<sub>n</sub>", isCorrect: false },
+                    { text: "[C<sub>6</sub>H<sub>7</sub>O<sub>2</sub>(OH)<sub>3</sub>]<sub>n</sub>", isCorrect: true },
+                    { text: "[C<sub>6</sub>H<sub>9</sub>O<sub>3</sub>(OH)<sub>2</sub>]<sub>n</sub>", isCorrect: false }
+                ],
+                rationale: "Mỗi mắt liên kết glucose C<sub>6</sub>H<sub>10</sub>O<sub>5</sub> có 3 nhóm -OH tự do, viết dưới dạng [C<sub>6</sub>H<sub>7</sub>O<sub>2</sub>(OH)<sub>3</sub>]<sub>n</sub>."
+            },
+            {
+                id: 26, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 26. Cặp chất nào sau đây cho được phản ứng thủy phân trong môi trường acid?",
+                options: [
+                    { text: "Maltose và fructose", isCorrect: false },
+                    { text: "Cellulose và saccharose", isCorrect: true },
+                    { text: "Cellulose và glucose", isCorrect: false },
+                    { text: "Saccharose và glucose", isCorrect: false }
+                ],
+                rationale: "Cellulose và saccharose đều bị thủy phân trong môi trường acid."
+            },
+            {
+                id: 27, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 27. Cặp chất nào sau đây cho được phản ứng thủy phân trong môi trường acid?",
+                options: [
+                    { text: "Maltose và fructose", isCorrect: false },
+                    { text: "Fructose và saccharose", isCorrect: false },
+                    { text: "Cellulose và glucose", isCorrect: false },
+                    { text: "Saccharose và tinh bột", isCorrect: true }
+                ],
+                rationale: "Saccharose và tinh bột đều tham gia phản ứng thủy phân trong môi trường acid."
+            },
+            {
+                id: 28, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 28. Nhận định nào sau đây là sai?",
+                options: [
+                    { text: "Amino acid là những hợp chất hữu cơ tạp chức, phân tử chứa đồng thời nhóm amino và nhóm carboxyl.", isCorrect: false },
+                    { text: "Trong môi trường pH = 10, glycine bị di chuyển về phía cực dương của điện trường.", isCorrect: false },
+                    { text: "Valine tác dụng với ethanol (xúc tác HCl khan) thu được hợp chất C<sub>7</sub>H<sub>17</sub>O<sub>2</sub>NCl.", isCorrect: true },
+                    { text: "Ở điều kiện thường, glycine ở trạng thái rắn, tan tốt trong nước.", isCorrect: false }
+                ],
+                rationale: "Valine ester hóa với C<sub>2</sub>H<sub>5</sub>OH và tác dụng với HCl tạo muối C<sub>7</sub>H<sub>16</sub>O<sub>2</sub>NCl. Phát biểu C ghi C<sub>7</sub>H<sub>17</sub>O<sub>2</sub>NCl là sai."
+            },
+            {
+                id: 29, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 29. Cho các phát biểu sau: (a) Cho dung dịch HNO<sub>3</sub> đặc vào dung dịch protein thu được chất rắn màu vàng. (b) Hemoglobin là protein dạng hình cầu tan tốt trong nước. (c) Trong phân tử Gly-Ala-Val có 4 nguyên tử oxygen. (d) H<sub>2</sub>NCH<sub>2</sub>CONHCH<sub>2</sub>CH<sub>2</sub>COOH là một dipeptide. Số phát biểu đúng là",
+                options: [
+                    { text: "4", isCorrect: false },
+                    { text: "1", isCorrect: false },
+                    { text: "2", isCorrect: true },
+                    { text: "3", isCorrect: false }
+                ],
+                rationale: "Các phát biểu (a) và (b) đúng. Tổng số phát biểu đúng là 2."
+            },
+            {
+                id: 30, type: "mcq", category: "Phần I: Trắc nghiệm 4 lựa chọn",
+                question: "Câu 30. Cho dung dịch sodium chloride vào dung dịch protein sẽ xảy ra",
+                options: [
+                    { text: "phản ứng màu biuret", isCorrect: false },
+                    { text: "phản ứng tạo kết tủa màu vàng", isCorrect: false },
+                    { text: "phản ứng thủy phân protein", isCorrect: false },
+                    { text: "hiện tượng đông tụ protein", isCorrect: true }
+                ],
+                rationale: "Cho dung dịch muối ăn đậm đặc vào dung dịch protein sẽ gây ra hiện tượng đông tụ protein."
             },
 
-            // --- MÔN SINH HỌC 12 ---
+            // PHẦN II: Đúng / Sai (31-38)
             {
-                id: 4, subject: "sinh", type: "mcq", category: "Môn Sinh học - Trắc nghiệm nhiều lựa chọn",
-                question: "Đơn vị cấu tạo chủ yếu của phân tử DNA là:",
+                id: 31, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 31. Khi thay thế nhóm -OH ở nhóm carboxyl (-COOH) của carboxylic acid bằng nhóm -OR’ thì được ester.<br>a. Nhóm chức của ester là -COO-. <br>b. Công thức của ester đơn chức là RCOOR’ (R, R’ phải là gốc hydrocarbon). <br>c. Ester no, đơn chức, mạch hở có công thức chung là C<sub>n</sub>H<sub>2n</sub>O<sub>2</sub> (n ≥ 2). <br>d. Phổ IR của ester có peak đặc trưng ở số sóng 3000 cm<sup>-1</sup>.",
                 options: [
-                    { text: "Amino acid", isCorrect: false },
-                    { text: "Nucleotide", isCorrect: true },
-                    { text: "Monosaccharide", isCorrect: false },
-                    { text: "Fatty acid", isCorrect: false }
+                    { text: "a. Đúng, b. Sai, c. Đúng, d. Sai", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Sai", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Sai, d. Sai", isCorrect: false },
+                    { text: "a. Sai, b. Đúng, c. Đúng, d. Đúng", isCorrect: false }
                 ],
-                rationale: "DNA là đại phân tử cấu tạo theo nguyên tắc đa phân với đơn phân là nucleotide."
+                rationale: "a đúng. b sai vì R có thể là H. c đúng (n ≥ 2). d sai vì peak đặc trưng của ester nằm ở khoảng 1715 - 1750 cm<sup>-1</sup>."
             },
             {
-                id: 5, subject: "sinh", type: "tf", category: "Môn Sinh học - Đúng / Sai",
-                question: "Nhận định nào sau đây đúng hay sai về cấu trúc và nguyên tắc bổ sung của DNA?",
-                statements: [
-                    { text: "Trong phân tử DNA, số lượng nucleotide loại A luôn bằng loại T và G luôn bằng X.", isTrue: true },
-                    { text: "Tỉ lệ (A+G)/(T+X) trong mọi phân tử DNA mạch kép luôn bằng 1[cite: 2].", isTrue: true },
-                    { text: "Hai mạch của phân tử DNA song song và cùng chiều.", isTrue: false },
-                    { text: "Liên kết hoá học nối giữa các nucleotide trên một mạch là liên kết hydrogen.", isTrue: false }
+                id: 32, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 32. Cho các hợp chất hữu cơ: CH<sub>3</sub>OH, C<sub>2</sub>H<sub>5</sub>COOH, HCOOCH<sub>3</sub>, CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>, CH<sub>3</sub>CHO, HCOOCH=CH<sub>2</sub>, (COOCH<sub>3</sub>)<sub>2</sub>.<br>a. Có 3 hợp chất thuộc loại ester. <br>b. Có 1 hợp chất là ester no, đơn chức, mạch hở. <br>c. Có 1 hợp chất là ester không no, 1C=C, đơn chức, mạch hở. <br>d. Có 1 hợp chất là ester no, hai chức, mạch hở.",
+                options: [
+                    { text: "a. Sai (có 4 ester), b. Đúng, c. Đúng, d. Đúng", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Sai, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Sai, d. Sai", isCorrect: false }
                 ],
-                rationale: "a, b Đúng theo nguyên tắc bổ sung[cite: 2]. c Sai vì hai mạch phản song song (5'->3' và 3'->5'). d Sai vì liên kết nối giữa các nucleotide dọc mạch là liên kết phosphodiester, còn hydrogen nối giữa 2 mạch."
+                rationale: "Các ester gồm HCOOCH<sub>3</sub>, CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>, HCOOCH=CH<sub>2</sub>, (COOCH<sub>3</sub>)<sub>2</sub> (tổng 4 ester, ý a sai)."
             },
             {
-                id: 6, subject: "sinh", type: "short", category: "Môn Sinh học - Trả lời ngắn",
-                question: "Cho phân tử DNA có tỉ lệ các nucleotide (A+T)/(G+X) = 2/3. Tính tỉ lệ phần trăm của loại nucleotide G trong phân tử DNA đó (Nhập dạng giá trị phần trăm: ví dụ 30% hoặc 30).[cite: 2]",
-                answer: "30%",
-                rationale: "Tổng (A+T) = 2 phần, (G+X) = 3 phần (tổng 5 phần = 100%). Suy ra (G+X) = 60% => G = 30%[cite: 2]."
+                id: 33, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 33. Linoleic acid là một acid béo.<br>a. Công thức linoleic có thể viết gọn là C<sub>17</sub>H<sub>33</sub>COOH. <br>b. Trong phân tử linoleic acid có chứa 2 liên kết đôi C=C đều ở dạng cis. <br>c. Linoleic acid thuộc loại acid béo không no, 1C=C, đơn chức, mạch hở. <br>d. Linoleic acid là acid béo thuộc nhóm omega – 6.",
+                options: [
+                    { text: "a. Sai, b. Đúng, c. Sai, d. Đúng", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Sai, c. Đúng, d. Sai", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Đúng, d. Sai", isCorrect: false }
+                ],
+                rationale: "Linoleic acid có công thức C<sub>17</sub>H<sub>31</sub>COOH chứa 2 liên kết đôi, nên a và c sai."
             },
             {
-                id: 7, subject: "sinh", type: "short", category: "Môn Sinh học - Trả lời ngắn",
-                question: "Một mạch đơn của DNA có tỉ lệ (A+G)/(T+X) = 0,5. Hãy tính tỉ lệ này ở mạch bổ sung của nó.",
+                id: 34, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 34. Chất béo có nhiều tính chất vật lí quan trọng.<br>a. Ở điều kiện thường, chất béo ở trạng thái lỏng hoặc rắn. <br>b. Chất béo nhẹ hơn nước và không tan trong nước, dễ tan trong các dung môi hữu cơ ít phân cực hoặc không phân cực. <br>c. Chất béo chứa nhiều gốc acid béo không no ở trạng thái rắn điều kiện thường... <br>d. Chất béo chứa nhiều gốc acid béo no ở trạng thái lỏng điều kiện thường...",
+                options: [
+                    { text: "a. Đúng, b. Đúng, c. Sai, d. Sai", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Đúng, c. Sai, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Đúng, d. Sai", isCorrect: false }
+                ],
+                rationale: "Ý c và d ngược nhau: acid béo no ở trạng thái rắn (mỡ), không no ở trạng thái lỏng (dầu)."
+            },
+            {
+                id: 35, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 35. Xét các phát biểu về saccharose và maltose.<br>a. Saccharose và maltose đều có công thức phân tử C<sub>12</sub>H<sub>22</sub>O<sub>11</sub> nên là đồng đẳng. <br>b. Mỗi phân tử saccharose và maltose đều gồm hai đơn vị monosaccharide. <br>c. Saccharose có nhiều trong cây mía, củ cải đường... maltose có nhiều trong mạch nha. <br>d. Saccharose và maltose đều có cấu tạo dạng mạch hở và mạch vòng.",
+                options: [
+                    { text: "a. Sai, b. Đúng, c. Đúng, d. Sai", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Sai, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Sai, d. Sai", isCorrect: false }
+                ],
+                rationale: "a sai vì chúng là đồng phân. d sai vì saccharose không mở vòng."
+            },
+            {
+                id: 36, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 36. Glucose và fructose là hai monosaccharide có cấu tạo cả dạng mạch hở và mạch vòng.<br>a. Dạng mạch hở glucose và fructose đều có 5 nhóm -OH và 1 nhóm -CHO. <br>b. Dạng mạch vòng glucose và fructose đều có nhóm -OH hemiacetal (hoặc hemiketal). <br>c. Trong dung dịch, glucose và fructose tồn tại chủ yếu ở dạng mạch vòng 6 cạnh. <br>d. Trong môi trường acid, glucose và fructose chuyển hóa qua lại lẫn nhau.",
+                options: [
+                    { text: "a. Sai, b. Đúng, c. Sai, d. Đúng", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Đúng, d. Sai", isCorrect: false },
+                    { text: "a. Sai, b. Sai, c. Sai, d. Sai", isCorrect: false }
+                ],
+                rationale: "a sai vì fructose ở dạng mạch hở là ketone. c sai vì fructose chủ yếu tồn tại dạng vòng 5 cạnh."
+            },
+            {
+                id: 37, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 37. Xét amine có công thức phân tử: C<sub>2</sub>H<sub>7</sub>N.<br>a. Có hai amine là đồng phân cấu tạo có cùng công thức phân tử C<sub>2</sub>H<sub>7</sub>N. <br>b. Tên gốc - chức amine bậc một có công thức C<sub>2</sub>H<sub>7</sub>N là ethylamine. <br>c. CTPT amine bậc hai ứng với C<sub>2</sub>H<sub>7</sub>N là CH<sub>3</sub>–NH–C<sub>2</sub>H<sub>5</sub>. <br>d. Không tồn tại amine bậc ba có công thức C<sub>2</sub>H<sub>7</sub>N.",
+                options: [
+                    { text: "a. Đúng, b. Đúng, c. Sai, d. Đúng", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Đúng, c. Sai, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Đúng, d. Sai", isCorrect: false }
+                ],
+                rationale: "c sai vì amine bậc hai ứng với C<sub>2</sub>H<sub>7</sub>N chỉ là dimethylamine (CH<sub>3</sub>-NH-CH<sub>3</sub>)."
+            },
+            {
+                id: 38, type: "tf", category: "Phần II: Câu trắc nghiệm đúng sai",
+                question: "Câu 38. Trimethylamine là amine gây nên mùi tanh của cá.<br>a. Trimethylamine thuộc loại amine bậc 2. <br>b. Để khử mùi tanh của cá, ta có thể dùng giấm hoặc chanh. <br>c. Trimethylamine là chất lỏng, tan được trong nước. <br>d. Trimethylamine khi tan trong nước làm quỳ tím hóa xanh.",
+                options: [
+                    { text: "a. Sai, b. Đúng, c. Đúng, d. Đúng", isCorrect: true },
+                    { text: "a. Đúng, b. Đúng, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Sai, b. Sai, c. Đúng, d. Đúng", isCorrect: false },
+                    { text: "a. Đúng, b. Sai, c. Sai, d. Sai", isCorrect: false }
+                ],
+                rationale: "a sai vì trimethylamine ((CH<sub>3</sub>)<sub>3</sub>N) là amine bậc 3."
+            },
+
+            // PHẦN III: Trả lời ngắn (39-58)
+            {
+                id: 39, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 39. Thủy phân ester mạch hở X có công thức phân tử C<sub>4</sub>H<sub>6</sub>O<sub>2</sub>, thu được sản phẩm có phản ứng tráng bạc. Có bao nhiêu công thức cấu tạo phù hợp của X?",
+                answer: "3",
+                rationale: "C<sub>4</sub>H<sub>6</sub>O<sub>2</sub> thủy phân sinh sản phẩm tráng bạc có 3 công thức phù hợp."
+            },
+            {
+                id: 40, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 40. Cho tất cả các đồng phân đơn chức, mạch hở, có cùng công thức phân tử C<sub>2</sub>H<sub>4</sub>O<sub>2</sub> lần lượt tác dụng với: Na, NaOH, NaHCO<sub>3</sub>. Có bao nhiêu phản ứng hóa học xảy ra?",
+                answer: "4",
+                rationale: "Gồm CH<sub>3</sub>COOH (tác dụng với Na, NaOH, NaHCO<sub>3</sub>) và HCOOCH<sub>3</sub> (tác dụng với NaOH). Tổng là 4 phản ứng."
+            },
+            {
+                id: 41, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 41. Thủy phân một triglyceride X bằng dung dịch NaOH, thu được hỗn hợp muối gồm sodium palmitate, sodium stearate và glycerol. Có bao nhiêu triglyceride X thỏa mãn tính chất trên?",
+                answer: "3",
+                rationale: "Có 3 công thức cấu tạo triglyceride thỏa mãn."
+            },
+            {
+                id: 42, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 42. Cho các ester: ethyl formate, vinyl acetate, triolein, methyl acrylate, phenyl acetate. Có bao nhiêu chất trong dãy khi thủy phân trong dung dịch NaOH (dư), đun nóng sinh ra alcohol?",
+                answer: "3",
+                rationale: "Các chất sinh ra alcohol gồm ethyl formate, triolein, methyl acrylate."
+            },
+            {
+                id: 43, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 43. Cho các phát biểu sau: (a) CTPT chung ester no đơn chức mạch hở là C<sub>n</sub>H<sub>2n</sub>O<sub>2</sub> (n ≥ 1). (b) Phản ứng giữa alcohol với carboxylic acid gọi là xà phòng hóa. (c) Dầu thực vật chứa chủ yếu gốc acid béo không no. (d) Số nguyên tử C trong chất béo là số chẵn. Số phát biểu sai?",
                 answer: "2",
-                rationale: "Mạch bổ sung có tỉ lệ nghịch đảo với mạch ban đầu: 1 / 0,5 = 2[cite: 2]."
+                rationale: "Phát biểu (a) và (b) sai -> Có 2 phát biểu sai."
+            },
+            {
+                id: 44, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 44. Cho các chất: C<sub>15</sub>H<sub>31</sub>COONa, CH<sub>3</sub>[CH<sub>2</sub>]<sub>11</sub>OSO<sub>3</sub>Na, CH<sub>3</sub>[CH2]<sub>11</sub>SO<sub>3</sub>Na, C<sub>17</sub>H<sub>33</sub>COOK. Số chất thuộc loại xà phòng là bao nhiêu?",
+                answer: "2",
+                rationale: "Xà phòng gồm C<sub>15</sub>H<sub>31</sub>COONa và C<sub>17</sub>H<sub>33</sub>COOK (2 chất)."
+            },
+            {
+                id: 45, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 45. Cho các chất: xà phòng, chất giặt rửa tự nhiên, chất giặt rửa tổng hợp, glycerol. Trong công nghiệp, có bao nhiêu chất được điều chế từ dầu mỏ?",
+                answer: "1",
+                rationale: "Chất giặt rửa tổng hợp được điều chế từ dầu mỏ."
+            },
+            {
+                id: 46, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 46. Cho các chất: palmitic acid, tristearin, sodium hydroxide, hydrochloric acid, sodium chloride, glycerol. Số hóa chất được sử dụng trong quá trình điều chế xà phòng bằng phản ứng xà phòng hóa là bao nhiêu?",
+                answer: "3",
+                rationale: "Gồm tristearin, sodium hydroxide và sodium chloride."
+            },
+            {
+                id: 47, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 47. Cho dãy các chất: acetaldehyde, acetylene, glucose, acetic acid, methyl acetate. Có bao nhiêu chất trong dãy có khả năng tham gia phản ứng tráng bạc?",
+                answer: "3",
+                rationale: "Gồm acetaldehyde, acetylene và glucose."
+            },
+            {
+                id: 48, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 48. Cho các chất: ethyl alcohol, glycerol, glucose, dimethyl ether và formic acid. Có bao nhiêu chất tác dụng được với Cu(OH)<sub>2</sub>?",
+                answer: "3",
+                rationale: "Gồm glycerol, glucose và formic acid."
+            },
+            {
+                id: 49, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 49. Cho các carbohydrate: glucose, fructose, saccharose và maltose. Có bao nhiêu carbohydrate có khả năng mở vòng trong dung dịch với dung môi nước?",
+                answer: "3",
+                rationale: "Gồm glucose, fructose và maltose."
+            },
+            {
+                id: 50, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 50. Cho các chất: methyl alcohol, methyl acetate, tripalmitin, glucose, fructose, saccharose. Có bao nhiêu chất tham gia phản ứng thủy phân?",
+                answer: "3",
+                rationale: "Gồm methyl acetate, tripalmitin và saccharose."
+            },
+            {
+                id: 51, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 51. Cho dãy: glucose, cellulose, methyl formate, fructose, acetic acid. Có bao nhiêu chất tham gia phản ứng với Cu(OH)<sub>2</sub>, đun nóng tạo kết tủa đỏ gạch?",
+                answer: "3",
+                rationale: "Gồm glucose, fructose và methyl formate."
+            },
+            {
+                id: 52, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 52. Cho các chất: saccharose, glucose, fructose, ethyl formate, formic acid và acetaldehyde. Có bao nhiêu chất vừa tráng bạc vừa phản ứng với Cu(OH)<sub>2</sub> điều kiện thường?",
+                answer: "3",
+                rationale: "Gồm glucose, fructose và formic acid."
+            },
+            {
+                id: 53, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 53. Cho các amine: CH<sub>3</sub>NH<sub>2</sub>, CH<sub>3</sub>–NH–CH<sub>3</sub>, C<sub>2</sub>H<sub>5</sub>NH<sub>2</sub>, CH<sub>3</sub>–NH–C<sub>2</sub>H<sub>5</sub>, C<sub>6</sub>H<sub>5</sub>NH<sub>2</sub>. Có bao nhiêu chất là amine bậc một?",
+                answer: "3",
+                rationale: "Gồm CH<sub>3</sub>NH<sub>2</sub>, C<sub>2</sub>H<sub>5</sub>NH<sub>2</sub> và C<sub>6</sub>H<sub>5</sub>NH<sub>2</sub>."
+            },
+            {
+                id: 54, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 54. Số đồng phân amine có công thức C<sub>3</sub>H<sub>9</sub>N là bao nhiêu?",
+                answer: "4",
+                rationale: "C<sub>3</sub>H<sub>9</sub>N có 4 đồng phân amine."
+            },
+            {
+                id: 55, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 55. Cho methylamine lần lượt tác dụng với dung dịch HCl, FeCl<sub>3</sub>, NaOH, Br<sub>2</sub>, HNO<sub>2</sub>. Có bao nhiêu trường hợp xảy ra phản ứng?",
+                answer: "4",
+                rationale: "Xảy ra với HCl, FeCl<sub>3</sub>, Br<sub>2</sub> và HNO<sub>2</sub> (4 trường hợp)."
+            },
+            {
+                id: 56, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 56. Số nhóm -NH<sub>2</sub> trong phân tử lysine là bao nhiêu?",
+                answer: "2",
+                rationale: "Lysine có chứa 2 nhóm -NH<sub>2</sub>."
+            },
+            {
+                id: 57, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 57. Cho các chất: methylamine, glycine, alanine, acetic acid, glutamic acid. Có bao nhiêu chất phản ứng với dung dịch HCl tạo muối?",
+                answer: "4",
+                rationale: "Gồm methylamine, glycine, alanine và glutamic acid (4 chất)."
+            },
+            {
+                id: 58, type: "short", category: "Phần III: Câu trả lời ngắn",
+                question: "Câu 58. Nếu thuỷ phân không hoàn toàn pentapeptide Gly-Ala-Gly-Ala-Gly thì thu được tối đa bao nhiêu dipeptide khác nhau?",
+                answer: "2",
+                rationale: "Thu được tối đa 2 dipeptide khác nhau là Gly-Ala và Ala-Gly."
             }
         ];
 
@@ -207,10 +679,12 @@
         function startQuiz(mode) {
             if (mode === 'all') {
                 filteredQuestions = [...questionsData];
-            } else if (mode === 'hoa') {
-                filteredQuestions = questionsData.filter(q => q.subject === 'hoa');
-            } else if (mode === 'sinh') {
-                filteredQuestions = questionsData.filter(q => q.subject === 'sinh');
+            } else if (mode === 'part1') {
+                filteredQuestions = questionsData.filter(q => q.id >= 1 && q.id <= 30);
+            } else if (mode === 'part2') {
+                filteredQuestions = questionsData.filter(q => q.id >= 31 && q.id <= 38);
+            } else if (mode === 'part3') {
+                filteredQuestions = questionsData.filter(q => q.id >= 39 && q.id <= 58);
             }
 
             currentQuestionIndex = 0;
@@ -226,12 +700,6 @@
             loadQuestion();
         }
 
-        function changeSubjectHome() {
-            document.getElementById('quiz-view').classList.add('hidden');
-            document.getElementById('score-board').classList.add('hidden');
-            document.getElementById('welcome-view').classList.remove('hidden');
-        }
-
         function loadQuestion() {
             const q = filteredQuestions[currentQuestionIndex];
             document.getElementById('question-tag').innerText = q.category;
@@ -239,20 +707,16 @@
             document.getElementById('question-text').innerHTML = q.question;
 
             const optionsContainer = document.getElementById('options-container');
-            const tfContainer = document.getElementById('tf-container');
             const inputContainer = document.getElementById('input-container');
             const feedbackBox = document.getElementById('feedback-box');
 
             feedbackBox.classList.add('hidden');
             optionsContainer.innerHTML = '';
-            tfContainer.innerHTML = '';
 
-            optionsContainer.classList.add('hidden');
-            tfContainer.classList.add('hidden');
-            inputContainer.classList.add('hidden');
-
-            if (q.type === 'mcq') {
+            if (q.type === 'mcq' || q.type === 'tf') {
                 optionsContainer.classList.remove('hidden');
+                inputContainer.classList.add('hidden');
+
                 q.options.forEach((opt, idx) => {
                     const btn = document.createElement('button');
                     btn.className = "w-full text-left p-4 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-500 transition text-slate-200 font-medium cursor-pointer option-btn";
@@ -260,36 +724,8 @@
                     btn.onclick = () => selectOption(idx, btn, q);
                     optionsContainer.appendChild(btn);
                 });
-            } else if (q.type === 'tf') {
-                tfContainer.classList.remove('hidden');
-                q.statements.forEach((st, idx) => {
-                    const row = document.createElement('div');
-                    row.className = "p-4 rounded-xl bg-slate-900 border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
-                    
-                    const textSpan = document.createElement('div');
-                    textSpan.className = "text-sm text-slate-200";
-                    textSpan.innerHTML = `<b>${String.fromCharCode(97 + idx)})</b> ${st.text}`;
-                    
-                    const btnGroup = document.createElement('div');
-                    btnGroup.className = "flex gap-2 shrink-0";
-
-                    const btnDung = document.createElement('button');
-                    btnDung.className = "px-4 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500 transition cursor-pointer tf-btn-d-${idx}";
-                    btnDung.innerText = "ĐÚNG";
-                    btnDung.onclick = () => checkTfAnswer(idx, true, q);
-
-                    const btnSai = document.createElement('button');
-                    btnSai.className = "px-4 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500 transition cursor-pointer tf-btn-s-${idx}";
-                    btnSai.innerText = "SAI";
-                    btnSai.onclick = () => checkTfAnswer(idx, false, q);
-
-                    btnGroup.appendChild(btnDung);
-                    btnGroup.appendChild(btnSai);
-                    row.appendChild(textSpan);
-                    row.appendChild(btnGroup);
-                    tfContainer.appendChild(row);
-                });
-            } else if (q.type === 'short') {
+            } else {
+                optionsContainer.classList.add('hidden');
                 inputContainer.classList.remove('hidden');
                 document.getElementById('user-short-input').value = '';
             }
@@ -314,54 +750,20 @@
             });
 
             const feedbackBox = document.getElementById('feedback-box');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackContent = document.getElementById('feedback-content');
             feedbackBox.classList.remove('hidden');
 
             if (selectedOpt.isCorrect) {
                 scoreCorrect++;
                 feedbackBox.className = "mt-6 p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
-                document.getElementById('feedback-title').innerText = "Chính xác! 🎉";
+                feedbackTitle.innerText = "Chính xác! 🎉";
             } else {
                 scoreIncorrect++;
                 feedbackBox.className = "mt-6 p-4 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-300";
-                document.getElementById('feedback-title').innerText = "Chưa chính xác! ❌";
+                feedbackTitle.innerText = "Chưa chính xác! ❌";
             }
-            document.getElementById('feedback-content').innerHTML = q.rationale;
-            updateScoreBoard();
-        }
-
-        let tfAnsweredCount = 0;
-        function checkTfAnswer(stmtIndex, userChoice, q) {
-            // Kiểm tra xem ý này đã được chọn chưa để tránh bấm lại
-            const isCorrect = (userChoice === q.statements[stmtIndex].isTrue);
-            
-            // Đánh dấu trực quan nút đã chọn
-            const btnD = document.querySelector(`.tf-btn-d-${stmtIndex}`);
-            const btnS = document.querySelector(`.tf-btn-s-${stmtIndex}`);
-            btnD.disabled = true;
-            btnS.disabled = true;
-
-            if (userChoice) {
-                btnD.classList.add(isCorrect ? 'bg-emerald-500/30' : 'bg-rose-500/30', 'border-cyan-400');
-            } else {
-                btnS.classList.add(isCorrect ? 'bg-emerald-500/30' : 'bg-rose-500/30', 'border-cyan-400');
-            }
-
-            if (isCorrect) {
-                scoreCorrect++;
-            } else {
-                scoreIncorrect++;
-            }
-
-            tfAnsweredCount++;
-            if (tfAnsweredCount === q.statements.length) {
-                answeredQuestions.add(currentQuestionIndex);
-                tfAnsweredCount = 0;
-                const feedbackBox = document.getElementById('feedback-box');
-                feedbackBox.classList.remove('hidden');
-                feedbackBox.className = "mt-6 p-4 rounded-xl border bg-slate-900 border-slate-700 text-slate-300";
-                document.getElementById('feedback-title').innerText = "Giải thích chi tiết các ý:";
-                document.getElementById('feedback-content').innerHTML = q.rationale;
-            }
+            feedbackContent.innerHTML = q.rationale;
             updateScoreBoard();
         }
 
@@ -372,6 +774,8 @@
             const q = filteredQuestions[currentQuestionIndex];
             const userVal = document.getElementById('user-short-input').value.trim();
             const feedbackBox = document.getElementById('feedback-box');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackContent = document.getElementById('feedback-content');
 
             const isCorrect = userVal.toLowerCase() === q.answer.toLowerCase();
 
@@ -379,13 +783,13 @@
             if (isCorrect) {
                 scoreCorrect++;
                 feedbackBox.className = "mt-6 p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
-                document.getElementById('feedback-title').innerText = "Chính xác! 🎉";
+                feedbackTitle.innerText = "Chính xác! 🎉";
             } else {
                 scoreIncorrect++;
                 feedbackBox.className = "mt-6 p-4 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-300";
-                document.getElementById('feedback-title').innerText = `Chưa chính xác! (Đáp án: ${q.answer}) ❌`;
+                feedbackTitle.innerText = `Chưa chính xác! (Đáp án đúng là: ${q.answer}) ❌`;
             }
-            document.getElementById('feedback-content').innerHTML = q.rationale;
+            feedbackContent.innerHTML = q.rationale;
             updateScoreBoard();
         }
 
@@ -396,7 +800,6 @@
         }
 
         function nextQuestion() {
-            tfAnsweredCount = 0;
             if (currentQuestionIndex < filteredQuestions.length - 1) {
                 currentQuestionIndex++;
                 loadQuestion();
@@ -407,7 +810,6 @@
         }
 
         function prevQuestion() {
-            tfAnsweredCount = 0;
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
                 loadQuestion();
