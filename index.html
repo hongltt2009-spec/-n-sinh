@@ -1,635 +1,527 @@
 <!DOCTYPE html>
-<html lang="vi" class="h-full">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khảo Sát Bảo Vệ Động Vật Quý Hiếm - Môn Ngữ Văn 12</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #059669; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #047857; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khảo Sát Bảo Vệ Động Vật Quý Hiếm - Môn Ngữ Văn 12</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Turso Client SDK -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@libsql/client@0.6.0/web";
+    window.createTursoClient = createClient;
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-emerald-50/50 min-h-screen font-sans text-gray-800">
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-30 bg-emerald-800 text-white shadow-lg">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('survey')">
-                <div class="bg-emerald-700/80 p-2.5 rounded-xl text-emerald-200 border border-emerald-600/50">
-                    <i class="fa-solid fa-paw text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-base sm:text-lg leading-tight">BẢO VỆ ĐỘNG VẬT QUÝ HIẾM</h1>
-                    <p class="text-xs text-emerald-200/90">Dự án Tuyên truyền & Tích hợp Môn Ngữ Văn 12</p>
-                </div>
+  <!-- Header -->
+  <header class="bg-emerald-700 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-paw text-2xl text-emerald-300"></i>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold">BẢO VỆ ĐỘNG VẬT QUÝ HIẾM</h1>
+          <p class="text-xs text-emerald-100">Dự án Tuyên truyền & Tích hợp Môn Ngữ Văn 12</p>
+        </div>
+      </div>
+      <button onclick="toggleAdminView()" class="bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 flex items-center gap-2 border border-emerald-600">
+        <i class="fa-solid fa-user-shield"></i>
+        <span class="hidden sm:inline">Dành cho Admin / Dev</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 md:p-6">
+
+    <!-- VIEW 1: KHẢO SÁT HỌC SINH -->
+    <div id="survey-section" class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100">
+        <h2 class="text-lg font-bold text-emerald-800 uppercase tracking-wide border-b pb-3 mb-4">
+          <i class="fa-solid fa-clipboard-question mr-2"></i>PHIẾU KHẢO SÁT (Dành cho Học sinh Lớp 12)
+        </h2>
+        <p class="text-gray-600 text-sm mb-6">
+          Vui lòng hoàn thành các câu hỏi dưới đây. Khảo sát hoàn toàn ẩn danh nhằm phục vụ mục đích học tập môn Ngữ văn 12.
+        </p>
+
+        <form id="survey-form" class="space-y-6">
+          <!-- Câu 1 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 1. Bạn hiểu thế nào về động vật quý hiếm?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q1" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Động vật có số lượng ít hoặc đang có nguy cơ tuyệt chủng.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q1" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Động vật có giá trị kinh tế cao.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q1" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Động vật chỉ sống trong sở thú.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q1" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Chưa hiểu rõ về động vật quý hiếm.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 2 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 2. Theo bạn, nguyên nhân nào khiến nhiều loài động vật quý hiếm có nguy cơ tuyệt chủng?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q2" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Săn bắt và buôn bán trái phép.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q2" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Phá rừng, mất môi trường sống.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q2" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Biến đổi khí hậu và ô nhiễm môi trường.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q2" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Tất cả các nguyên nhân trên.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 3 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 3. Bạn có biết những loài động vật quý hiếm đang được bảo vệ ở Việt Nam không?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q3" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Biết nhiều loài.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q3" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Biết một vài loài.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q3" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Chỉ nghe tên nhưng chưa hiểu rõ.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q3" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Chưa biết.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 4 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 4. Theo kiến thức môn Ngữ văn lớp 12, việc bảo vệ động vật quý hiếm có ý nghĩa gì đối với hệ sinh thái?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q4" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Duy trì đa dạng sinh học và cân bằng sinh thái.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q4" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Chỉ làm tăng số lượng động vật.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q4" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Không ảnh hưởng đến hệ sinh thái.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q4" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Chỉ có ý nghĩa về kinh tế.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 5 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 5. Bạn đã từng thấy thông tin về việc săn bắt hoặc buôn bán động vật quý hiếm trên mạng xã hội chưa?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q5" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Thường xuyên.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q5" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Thỉnh thoảng.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q5" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Hiếm khi.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q5" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Chưa từng.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 6 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 6. Nếu phát hiện hành vi săn bắt hoặc buôn bán động vật quý hiếm trái phép, bạn sẽ làm gì?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q6" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Báo cho cơ quan chức năng hoặc người có trách nhiệm.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q6" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Chia sẻ thông tin cảnh báo trên mạng xã hội.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q6" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Bỏ qua vì cho rằng không liên quan đến mình.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q6" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Chưa biết nên làm gì.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Câu 7 -->
+          <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+            <p class="font-semibold text-gray-800 mb-3">Câu 7. Theo bạn, học sinh lớp 12 có thể góp phần bảo vệ động vật quý hiếm bằng cách nào?</p>
+            <div class="space-y-2">
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q7" value="A" required class="w-4 h-4 text-emerald-600"> <span class="ml-3">A. Tìm hiểu và tuyên truyền kiến thức.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q7" value="B" class="w-4 h-4 text-emerald-600"> <span class="ml-3">B. Không mua hoặc sử dụng sản phẩm từ động vật hoang dã trái phép.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q7" value="C" class="w-4 h-4 text-emerald-600"> <span class="ml-3">C. Tham gia hoạt động bảo vệ môi trường.</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-white rounded-lg border hover:bg-emerald-50/50 cursor-pointer text-sm">
+                <input type="radio" name="q7" value="D" class="w-4 h-4 text-emerald-600"> <span class="ml-3">D. Tất cả các phương án trên.</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition duration-200 text-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Gửi Khảo Sát
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- VIEW 2: ADMIN DASHBOARD -->
+    <div id="admin-section" class="hidden space-y-6">
+      <!-- Cấu hình Turso Admin -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4 mb-4">
+          <div>
+            <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">Khu Vực Quản Trị</span>
+            <h2 class="text-xl font-bold text-gray-800 mt-1">Bảng Điều Khiển & Thống Kê Turso</h2>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="configureTurso()" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-gear"></i> Cấu hình Turso
+            </button>
+            <button onclick="loadTursoData()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate"></i> Tải lại Dữ liệu
+            </button>
+            <button onclick="exportCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-file-csv"></i> Xuất CSV
+            </button>
+            <button onclick="toggleAdminView()" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i> Về Khảo Sát
+            </button>
+          </div>
+        </div>
+
+        <!-- Thống kê tổng số lượt -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center gap-4">
+            <div class="p-3 bg-emerald-600 text-white rounded-lg">
+              <i class="fa-solid fa-users text-2xl"></i>
             </div>
             <div>
-                <button onclick="openAdminModal()" class="bg-emerald-900/80 hover:bg-emerald-950 border border-emerald-700 text-emerald-100 font-medium text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow transition duration-200 flex items-center gap-2">
-                    <i class="fa-solid fa-user-gear"></i>
-                    <span class="hidden sm:inline">Dành cho Admin / Dev</span>
-                    <span class="sm:hidden">Dev</span>
-                </button>
+              <p class="text-xs text-gray-500 uppercase font-bold">Đã hoàn thành khảo sát</p>
+              <p id="total-count" class="text-3xl font-extrabold text-emerald-800">0</p>
             </div>
+          </div>
+          <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl flex items-center gap-4">
+            <div class="p-3 bg-blue-600 text-white rounded-lg">
+              <i class="fa-solid fa-list-check text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase font-bold">Số câu hỏi khảo sát</p>
+              <p class="text-3xl font-extrabold text-blue-800">7</p>
+            </div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center gap-4">
+            <div class="p-3 bg-amber-600 text-white rounded-lg">
+              <i class="fa-solid fa-database text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase font-bold">Cơ sở dữ liệu</p>
+              <p class="text-lg font-bold text-amber-800">Turso Cloud</p>
+            </div>
+          </div>
         </div>
-    </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
-        
-        <!-- ================= SURVEY VIEW ================= -->
-        <section id="surveyView" class="space-y-6">
-            <!-- Hero Header Card -->
-            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-emerald-100 border-t-4 border-t-emerald-600 relative overflow-hidden">
-                <div class="absolute -right-6 -bottom-6 opacity-5 text-emerald-900 pointer-events-none">
-                    <i class="fa-solid fa-shield-cat text-9xl"></i>
-                </div>
-                <div class="relative z-10 space-y-3">
-                    <div class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-200">
-                        <i class="fa-solid fa-user-shield text-emerald-600"></i> Khảo sát hoàn toàn ẩn danh
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
-                        PHIẾU KHẢO SÁT: BẢO VỆ ĐỘNG VẬT QUÝ HIẾM
-                    </h2>
-                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
-                        Khảo sát dành cho <strong>Học sinh lớp 12</strong> phục vụ chủ đề bài học và dự án tuyên truyền môn <strong>Ngữ Văn</strong>. Mọi câu trả lời của bạn đều được ghi nhận hoàn toàn <strong>ẩn danh</strong> và đóng góp thiết thực cho dự án!
-                    </p>
-                    <div class="pt-1 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                        <i class="fa-solid fa-clock"></i> Thời gian làm bài dự kiến: 1 - 2 phút
-                    </div>
-                </div>
-            </div>
-
-            <!-- Survey Form -->
-            <form id="surveyForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                <!-- Questions List (Rendered Dynamically) -->
-                <div id="questionsList" class="space-y-6"></div>
-
-                <!-- Submit Button -->
-                <div class="flex justify-end pt-4">
-                    <button type="submit" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base sm:text-lg px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center gap-3">
-                        <i class="fa-solid fa-paper-plane"></i> Gửi Khảo Sát Ẩn Danh
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <!-- ================= ADMIN DASHBOARD VIEW ================= -->
-        <section id="adminView" class="hidden space-y-6">
-            <!-- Top Navigation & Controls -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full mb-1 border border-emerald-200">Khu Vực Quản Trị</span>
-                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Bảng Điều Khiển & Thống Kê</h2>
-                </div>
-                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                    <button onclick="exportToCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl shadow transition flex items-center gap-2">
-                        <i class="fa-solid fa-file-excel"></i> Xuất CSV
-                    </button>
-                    <button onclick="seedSampleData()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2">
-                        <i class="fa-solid fa-database"></i> Thêm Dữ Liệu Mẫu
-                    </button>
-                    <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2">
-                        <i class="fa-solid fa-trash-can"></i> Xóa Hết Dữ Liệu
-                    </button>
-                    <button onclick="switchTab('survey')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-left"></i> Trang Khảo Sát
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Overview Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex items-center gap-4">
-                    <div class="bg-emerald-100 text-emerald-800 p-3.5 rounded-2xl text-2xl border border-emerald-200">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Đã hoàn thành khảo sát</p>
-                        <p id="totalResponses" class="text-3xl font-extrabold text-slate-900">0</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex items-center gap-4">
-                    <div class="bg-sky-100 text-sky-800 p-3.5 rounded-2xl text-2xl border border-sky-200">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Số câu hỏi khảo sát</p>
-                        <p class="text-3xl font-extrabold text-slate-900">7</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex items-center gap-4">
-                    <div class="bg-amber-100 text-amber-800 p-3.5 rounded-2xl text-2xl border border-amber-200">
-                        <i class="fa-solid fa-book-bookmark"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chủ đề bài học</p>
-                        <p class="text-base font-bold text-slate-800">Môn Ngữ Văn 12</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chart Analysis Section -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900">Trực Quan Hóa Biểu Đồ Thống Kê</h3>
-                        <p class="text-xs text-slate-500">Chọn câu hỏi bên phải để xem phân tích dữ liệu tương ứng</p>
-                    </div>
-                    <div class="w-full sm:w-auto">
-                        <select id="questionSelect" onchange="updateCharts()" class="w-full sm:w-80 px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl font-medium text-slate-900 text-xs sm:text-sm focus:ring-2 focus:ring-emerald-600 outline-none">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Charts Display Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Bar Chart Card -->
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between">
-                        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 text-center flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-chart-column text-emerald-600"></i> Biểu Đồ Cột (Bar Chart)
-                        </h4>
-                        <div class="relative w-full h-72">
-                            <canvas id="barChart"></canvas>
-                        </div>
-                    </div>
-                    <!-- Doughnut / Pie Chart Card -->
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col justify-between">
-                        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 text-center flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-emerald-600"></i> Biểu Đồ Tròn (Doughnut Chart)
-                        </h4>
-                        <div class="relative w-full h-72 flex justify-center">
-                            <canvas id="pieChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Responses Data Table -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-table-list text-emerald-600"></i> Bảng Dữ Liệu Phản Hồi Chi Tiết
-                    </h3>
-                </div>
-                <div class="overflow-x-auto rounded-xl border border-slate-200">
-                    <table class="w-full text-left text-xs sm:text-sm text-slate-700">
-                        <thead class="bg-emerald-800 text-emerald-50 font-semibold">
-                            <tr>
-                                <th class="p-3 whitespace-nowrap">Mã Lượt</th>
-                                <th class="p-3 whitespace-nowrap">Thời gian gửi</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 1</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 2</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 3</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 4</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 5</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 6</th>
-                                <th class="p-3 text-center whitespace-nowrap">Câu 7</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTableBody" class="divide-y divide-slate-100 bg-white">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-5 text-center border-t border-slate-800">
-        <div class="max-w-4xl mx-auto px-4 space-y-1">
-            <p class="text-slate-200 font-medium">Phiếu Khảo Sát Tuyên Truyền Bảo Vệ Động Vật Quý Hiếm - Môn Ngữ Văn 12</p>
-            <p class="text-slate-500">Dữ liệu được lưu trữ trực tiếp trên thiết bị cục bộ • Bảo mật & Ẩn danh hoàn toàn</p>
+        <!-- Bộ chọn câu hỏi phân tích -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Chọn câu hỏi để xem phân tích chi tiết:</label>
+          <select id="question-select" onchange="updateCharts()" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-medium bg-white focus:ring-2 focus:ring-emerald-500">
+            <option value="q1">Câu 1: Bạn hiểu thế nào về động vật quý hiếm?</option>
+            <option value="q2">Câu 2: Nguyên nhân khiến nhiều loài quý hiếm tuyệt chủng?</option>
+            <option value="q3">Câu 3: Mức độ biết các loài đang được bảo vệ ở VN?</option>
+            <option value="q4">Câu 4: Ý nghĩa bảo vệ động vật theo môn Ngữ văn 12?</option>
+            <option value="q5">Câu 5: Tần suất thấy tin săn bắt/buôn bán trên MXH?</option>
+            <option value="q6">Câu 6: Phản ứng khi phát hiện săn bắt trái phép?</option>
+            <option value="q7">Câu 7: Cách học sinh lớp 12 góp phần bảo vệ?</option>
+          </select>
         </div>
-    </footer>
 
-    <!-- Admin Password Modal -->
-    <div id="adminModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4 border border-slate-200">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-lock text-emerald-600"></i> Đăng Nhập Developer
-                </h3>
-                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <p class="text-xs text-slate-500">Nhập mật khẩu quyền Developer để xem bảng số liệu thống kê.</p>
-            <form onsubmit="verifyAdminPass(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu xác nhận</label>
-                    <input type="password" id="adminPasswordInput" required placeholder="Nhập mật khẩu..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-600 outline-none text-sm">
-                </div>
-                <div id="modalErrorMsg" class="hidden text-xs text-rose-600 font-medium flex items-center gap-1">
-                    <i class="fa-solid fa-circle-exclamation"></i> Mật khẩu sai! Vui lòng thử lại.
-                </div>
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeAdminModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Hủy</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white shadow">Xác Nhận</button>
-                </div>
-            </form>
+        <!-- Biểu đồ -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+          <div class="bg-white p-4 rounded-xl border shadow-sm">
+            <h3 class="text-sm font-bold text-gray-700 mb-3 text-center">📊 BIỂU ĐỒ CỘT (BAR CHART)</h3>
+            <div class="h-64"><canvas id="barChart"></canvas></div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border shadow-sm">
+            <h3 class="text-sm font-bold text-gray-700 mb-3 text-center">🍩 BIỂU ĐỒ TRÒN (DOUGHNUT CHART)</h3>
+            <div class="h-64"><canvas id="doughnutChart"></canvas></div>
+          </div>
         </div>
-    </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl hidden flex items-center gap-3 transition-opacity border border-slate-700">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toastMsg" class="text-sm font-medium">Thao tác thành công!</span>
-    </div>
-
-    <script>
-        // Survey Questions Array (Original 7 Questions - Sinh học updated to Ngữ văn)
-        const surveyQuestions = [
-            {
-                id: 1,
-                title: "Câu 1. Bạn hiểu thế nào về động vật quý hiếm?",
-                options: [
-                    { key: "A", text: "Động vật có số lượng ít hoặc đang có nguy cơ tuyệt chủng." },
-                    { key: "B", text: "Động vật có giá trị kinh tế cao." },
-                    { key: "C", text: "Động vật chỉ sống trong sở thú." },
-                    { key: "D", text: "Chưa hiểu rõ về động vật quý hiếm." }
-                ]
-            },
-            {
-                id: 2,
-                title: "Câu 2. Theo bạn, nguyên nhân nào khiến nhiều loài động vật quý hiếm có nguy cơ tuyệt chủng?",
-                options: [
-                    { key: "A", text: "Săn bắt và buôn bán trái phép." },
-                    { key: "B", text: "Phá rừng, mất môi trường sống." },
-                    { key: "C", text: "Biến đổi khí hậu và ô nhiễm môi trường." },
-                    { key: "D", text: "Tất cả các nguyên nhân trên." }
-                ]
-            },
-            {
-                id: 3,
-                title: "Câu 3. Bạn có biết những loài động vật quý hiếm đang được bảo vệ ở Việt Nam không?",
-                options: [
-                    { key: "A", text: "Biết nhiều loài." },
-                    { key: "B", text: "Biết một vài loài." },
-                    { key: "C", text: "Chỉ nghe tên nhưng chưa hiểu rõ." },
-                    { key: "D", text: "Chưa biết." }
-                ]
-            },
-            {
-                id: 4,
-                title: "Câu 4. Theo kiến thức môn Ngữ văn lớp 12, việc bảo vệ động vật quý hiếm có ý nghĩa gì đối với hệ sinh thái?",
-                options: [
-                    { key: "A", text: "Duy trì đa dạng sinh học và cân bằng sinh thái." },
-                    { key: "B", text: "Chỉ làm tăng số lượng động vật." },
-                    { key: "C", text: "Không ảnh hưởng đến hệ sinh thái." },
-                    { key: "D", text: "Chỉ có ý nghĩa về kinh tế." }
-                ]
-            },
-            {
-                id: 5,
-                title: "Câu 5. Bạn đã từng thấy thông tin về việc săn bắt hoặc buôn bán động vật quý hiếm trên mạng xã hội chưa?",
-                options: [
-                    { key: "A", text: "Thường xuyên." },
-                    { key: "B", text: "Thỉnh thoảng." },
-                    { key: "C", text: "Hiếm khi." },
-                    { key: "D", text: "Chưa từng." }
-                ]
-            },
-            {
-                id: 6,
-                title: "Câu 6. Nếu phát hiện hành vi săn bắt hoặc buôn bán động vật quý hiếm trái phép, bạn sẽ làm gì?",
-                options: [
-                    { key: "A", text: "Báo cho cơ quan chức năng hoặc người có trách nhiệm." },
-                    { key: "B", text: "Chia sẻ thông tin cảnh báo trên mạng xã hội." },
-                    { key: "C", text: "Bỏ qua vì cho rằng không liên quan đến mình." },
-                    { key: "D", text: "Chưa biết nên làm gì." }
-                ]
-            },
-            {
-                id: 7,
-                title: "Câu 7. Theo bạn, học sinh lớp 12 có thể góp phần bảo vệ động vật quý hiếm bằng cách nào?",
-                options: [
-                    { key: "A", text: "Tìm hiểu và tuyên truyền kiến thức." },
-                    { key: "B", text: "Không mua hoặc sử dụng sản phẩm từ động vật hoang dã trái phép." },
-                    { key: "C", text: "Tham gia hoạt động bảo vệ môi trường." },
-                    { key: "D", text: "Tất cả các phương án trên." }
-                ]
-            }
-        ];
-
-        // Default Sample Data
-        const defaultSampleResponses = [
-            { id: 1, timestamp: "2026-10-21 08:30", answers: { q1: "A", q2: "D", q3: "B", q4: "A", q5: "A", q6: "A", q7: "D" } },
-            { id: 2, timestamp: "2026-10-21 09:15", answers: { q1: "A", q2: "D", q3: "A", q4: "A", q5: "B", q6: "B", q7: "D" } },
-            { id: 3, timestamp: "2026-10-21 09:50", answers: { q1: "B", q2: "A", q3: "C", q4: "A", q5: "A", q6: "A", q7: "D" } },
-            { id: 4, timestamp: "2026-10-21 10:10", answers: { q1: "A", q2: "D", q3: "B", q4: "A", q5: "C", q6: "D", q7: "A" } },
-            { id: 5, timestamp: "2026-10-21 10:25", answers: { q1: "A", q2: "D", q3: "A", q4: "A", q5: "B", q6: "A", q7: "D" } }
-        ];
-
-        let barChartInstance = null;
-        let pieChartInstance = null;
-
-        // Initialize App
-        window.addEventListener('DOMContentLoaded', () => {
-            initLocalStorage();
-            renderSurveyQuestions();
-            populateQuestionSelect();
-        });
-
-        function initLocalStorage() {
-            if (!localStorage.getItem('rareAnimalsSurveyResponses')) {
-                localStorage.setItem('rareAnimalsSurveyResponses', JSON.stringify(defaultSampleResponses));
-            }
-        }
-
-        function getStoredData() {
-            return JSON.parse(localStorage.getItem('rareAnimalsSurveyResponses')) || [];
-        }
-
-        // Render Questions
-        function renderSurveyQuestions() {
-            const container = document.getElementById('questionsList');
-            container.innerHTML = surveyQuestions.map((q) => `
-                <div class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 hover:border-emerald-300 transition">
-                    <h4 class="font-bold text-slate-900 text-base sm:text-lg mb-4 leading-relaxed">
-                        ${q.title} <span class="text-rose-500">*</span>
-                    </h4>
-                    <div class="space-y-2.5">
-                        ${q.options.map(opt => `
-                            <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200/90 hover:bg-emerald-50/60 hover:border-emerald-400 cursor-pointer transition">
-                                <input type="radio" name="q${q.id}" value="${opt.key}" required class="mt-0.5 w-4 h-4 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
-                                <span class="text-sm font-medium text-slate-700 leading-snug">
-                                    <strong class="text-emerald-800">${opt.key}.</strong> ${opt.text}
-                                </span>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Form Submit
-        function handleFormSubmit(e) {
-            e.preventDefault();
-
-            const answers = {};
-            surveyQuestions.forEach(q => {
-                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-                if (selected) answers[`q${q.id}`] = selected.value;
-            });
-
-            const currentData = getStoredData();
-            const newResponse = {
-                id: currentData.length + 1,
-                timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
-                answers
-            };
-
-            currentData.push(newResponse);
-            localStorage.setItem('rareAnimalsSurveyResponses', JSON.stringify(currentData));
-
-            document.getElementById('surveyForm').reset();
-            showToast('Cảm ơn bạn! Ý kiến khảo sát đã được gửi thành công.');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Populate Select Menu for Charts
-        function populateQuestionSelect() {
-            const select = document.getElementById('questionSelect');
-            select.innerHTML = surveyQuestions.map(q => `
-                <option value="${q.id}">Câu ${q.id}: ${q.title.substring(0, 42)}...</option>
-            `).join('');
-        }
-
-        // Tab Navigation
-        function switchTab(tab) {
-            const surveyView = document.getElementById('surveyView');
-            const adminView = document.getElementById('adminView');
-            if (tab === 'admin') {
-                surveyView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-                refreshAdminDashboard();
-            } else {
-                adminView.classList.add('hidden');
-                surveyView.classList.remove('hidden');
-            }
-        }
-
-        // Admin Password Verification
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            document.getElementById('modalErrorMsg').classList.add('hidden');
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('adminPasswordInput').focus();
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        function verifyAdminPass(e) {
-            e.preventDefault();
-            const input = document.getElementById('adminPasswordInput').value;
-            if (input === '11122009') {
-                closeAdminModal();
-                switchTab('admin');
-                showToast('Đăng nhập thành công!', 'success');
-            } else {
-                document.getElementById('modalErrorMsg').classList.remove('hidden');
-            }
-        }
-
-        // Refresh Admin Dashboard Data
-        function refreshAdminDashboard() {
-            const data = getStoredData();
-            document.getElementById('totalResponses').innerText = data.length;
-            renderDataTable(data);
-            updateCharts();
-        }
-
-        // Render Data Table
-        function renderDataTable(data) {
-            const tbody = document.getElementById('dataTableBody');
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-400">Chưa có lượt làm bài nào.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = data.map((item, idx) => `
-                <tr class="hover:bg-slate-50 border-b border-slate-100">
-                    <td class="p-3 font-bold text-emerald-800 whitespace-nowrap">Lượt #${item.id || (idx + 1)}</td>
-                    <td class="p-3 whitespace-nowrap text-slate-500">${item.timestamp}</td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q1 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q2 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q3 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q4 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q5 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q6 || '-'}</span></td>
-                    <td class="p-3 text-center"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${item.answers.q7 || '-'}</span></td>
+        <!-- Bảng Dữ Liệu -->
+        <div class="mt-8">
+          <h3 class="text-md font-bold text-gray-800 mb-3"><i class="fa-solid fa-table mr-2"></i>Danh Sách Lượt Khảo Sát Từng Học Sinh</h3>
+          <div class="overflow-x-auto border rounded-xl">
+            <table class="w-full text-sm text-left text-gray-600">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b">
+                <tr>
+                  <th class="px-4 py-3"># STT</th>
+                  <th class="px-4 py-3">Thời gian</th>
+                  <th class="px-4 py-3">Q1</th>
+                  <th class="px-4 py-3">Q2</th>
+                  <th class="px-4 py-3">Q3</th>
+                  <th class="px-4 py-3">Q4</th>
+                  <th class="px-4 py-3">Q5</th>
+                  <th class="px-4 py-3">Q6</th>
+                  <th class="px-4 py-3">Q7</th>
                 </tr>
-            `).join('');
+              </thead>
+              <tbody id="response-table-body">
+                <tr><td colspan="9" class="text-center py-4 text-gray-400">Đang tải dữ liệu...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Cấu hình chìa khóa mặc định Turso (Hoặc điền qua giao diện Admin)
+    let tursoUrl = localStorage.getItem('turso_url') || "";
+    let tursoToken = localStorage.getItem('turso_token') || "";
+    
+    let dbClient = null;
+    let responsesData = [];
+    let barChartInstance = null;
+    let doughnutChartInstance = null;
+
+    // Khởi tạo Client Turso
+    function initTurso() {
+      if (tursoUrl && tursoToken && window.createTursoClient) {
+        try {
+          dbClient = window.createTursoClient({
+            url: tursoUrl,
+            authToken: tursoToken
+          });
+          createTableIfNotExists();
+        } catch (e) {
+          console.error("Lỗi khởi tạo Turso Client:", e);
         }
+      }
+    }
 
-        // Render & Update Chart.js Charts
-        function updateCharts() {
-            const selectedQId = parseInt(document.getElementById('questionSelect').value);
-            const data = getStoredData();
+    async function createTableIfNotExists() {
+      if (!dbClient) return;
+      try {
+        await dbClient.execute(`
+          CREATE TABLE IF NOT EXISTS survey_responses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            q1 TEXT, q2 TEXT, q3 TEXT, q4 TEXT, q5 TEXT, q6 TEXT, q7 TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+        `);
+      } catch (err) {
+        console.error("Không thể tạo bảng trên Turso:", err);
+      }
+    }
 
-            const counts = { A: 0, B: 0, C: 0, D: 0 };
-            data.forEach(item => {
-                const ans = item.answers[`q${selectedQId}`];
-                if (ans && counts.hasOwnProperty(ans)) {
-                    counts[ans]++;
-                }
-            });
+    // Yêu cầu nhập cấu hình Turso
+    function configureTurso() {
+      const url = prompt("Nhập Turso Database URL (libsql://...):", tursoUrl);
+      if (url === null) return;
+      const token = prompt("Nhập Turso Auth Token:", tursoToken);
+      if (token === null) return;
 
-            const labels = ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'];
-            const chartData = [counts.A, counts.B, counts.C, counts.D];
-            
-            const bgColors = ['#059669', '#0284c7', '#d97706', '#dc2626'];
-            const hoverColors = ['#047857', '#0369a1', '#b45309', '#b91c1c'];
+      tursoUrl = url.trim();
+      tursoToken = token.trim();
+      localStorage.setItem('turso_url', tursoUrl);
+      localStorage.setItem('turso_token', tursoToken);
 
-            if (barChartInstance) barChartInstance.destroy();
-            if (pieChartInstance) pieChartInstance.destroy();
+      initTurso();
+      alert("Đã lưu cấu hình Turso thành công!");
+      loadTursoData();
+    }
 
-            // Bar Chart
-            const ctxBar = document.getElementById('barChart').getContext('2d');
-            barChartInstance = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Số lượt chọn',
-                        data: chartData,
-                        backgroundColor: bgColors,
-                        hoverBackgroundColor: hoverColors,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { precision: 0 }
-                        }
-                    }
-                }
-            });
+    // Đăng nhập Admin mật khẩu 11122009
+    function toggleAdminView() {
+      const adminSection = document.getElementById('admin-section');
+      const surveySection = document.getElementById('survey-section');
 
-            // Doughnut Chart
-            const ctxPie = document.getElementById('pieChart').getContext('2d');
-            pieChartInstance = new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: chartData,
-                        backgroundColor: bgColors,
-                        hoverBackgroundColor: hoverColors,
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { boxWidth: 12, padding: 12 }
-                        }
-                    }
-                }
-            });
+      if (adminSection.classList.contains('hidden')) {
+        const password = prompt("Nhập mật khẩu Dev/Admin:");
+        if (password === "11122009") {
+          if (!tursoUrl || !tursoToken) {
+            alert("Vui lòng cấu hình Turso Database URL và Token!");
+            configureTurso();
+          }
+          surveySection.classList.add('hidden');
+          adminSection.classList.remove('hidden');
+          loadTursoData();
+        } else if (password !== null) {
+          alert("Mật khẩu không chính xác!");
         }
+      } else {
+        adminSection.classList.add('hidden');
+        surveySection.classList.remove('hidden');
+      }
+    }
 
-        // Export to CSV
-        function exportToCSV() {
-            const data = getStoredData();
-            if (data.length === 0) {
-                showToast('Không có dữ liệu để xuất!', 'info');
-                return;
-            }
+    // Gửi khảo sát vào Turso
+    document.getElementById('survey-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const q1 = formData.get('q1');
+      const q2 = formData.get('q2');
+      const q3 = formData.get('q3');
+      const q4 = formData.get('q4');
+      const q5 = formData.get('q5');
+      const q6 = formData.get('q6');
+      const q7 = formData.get('q7');
 
-            let csv = "\uFEFF"; // UTF-8 BOM
-            csv += "Ma Luot,Thoi Gian,Cau 1,Cau 2,Cau 3,Cau 4,Cau 5,Cau 6,Cau 7\n";
+      if (!dbClient) {
+        initTurso();
+      }
 
-            data.forEach((item, idx) => {
-                const row = [
-                    `"Luot #${item.id || (idx + 1)}"`,
-                    `"${item.timestamp}"`,
-                    `"${item.answers.q1 || ''}"`,
-                    `"${item.answers.q2 || ''}"`,
-                    `"${item.answers.q3 || ''}"`,
-                    `"${item.answers.q4 || ''}"`,
-                    `"${item.answers.q5 || ''}"`,
-                    `"${item.answers.q6 || ''}"`,
-                    `"${item.answers.q7 || ''}"`
-                ];
-                csv += row.join(",") + "\n";
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `Khao_Sat_Dong_Vat_Quy_Hiem_Ngu_Van_${new Date().toISOString().slice(0,10)}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+      if (dbClient) {
+        try {
+          await dbClient.execute({
+            sql: "INSERT INTO survey_responses (q1, q2, q3, q4, q5, q6, q7) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            args: [q1, q2, q3, q4, q5, q6, q7]
+          });
+          alert("Cảm ơn bạn đã hoàn thành câu hỏi khảo sát!");
+          this.reset();
+        } catch (err) {
+          alert("Lỗi khi gửi dữ liệu lên Turso: " + err.message);
         }
+      } else {
+        alert("Chưa kết nối Turso Database! Vui lòng cấu hình URL & Token trong menu Admin.");
+      }
+    });
 
-        // Add Sample Data
-        function seedSampleData() {
-            const data = getStoredData();
-            const combined = [...data, ...defaultSampleResponses.map((item, i) => ({
-                ...item,
-                id: data.length + i + 1,
-                timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16)
-            }))];
-            localStorage.setItem('rareAnimalsSurveyResponses', JSON.stringify(combined));
-            refreshAdminDashboard();
-            showToast('Đã thêm lượt trả lời mẫu!');
+    // Tải dữ liệu từ Turso về Admin
+    async function loadTursoData() {
+      if (!dbClient) initTurso();
+      if (!dbClient) return;
+
+      try {
+        const res = await dbClient.execute("SELECT * FROM survey_responses ORDER BY id DESC");
+        responsesData = res.rows;
+        
+        document.getElementById('total-count').innerText = responsesData.length;
+        renderTable();
+        updateCharts();
+      } catch (err) {
+        alert("Không thể tải dữ liệu từ Turso: " + err.message);
+      }
+    }
+
+    // Hiển thị Bảng
+    function renderTable() {
+      const tbody = document.getElementById('response-table-body');
+      tbody.innerHTML = '';
+
+      if (responsesData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-gray-400">Chưa có bài làm nào trong CSDL.</td></tr>`;
+        return;
+      }
+
+      responsesData.forEach((row, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50 text-xs md:text-sm";
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-bold text-gray-700">Lượt #${responsesData.length - index}</td>
+          <td class="px-4 py-3 text-gray-500">${row.created_at || 'Mới đây'}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q1}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q2}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q3}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q4}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q5}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q6}</span></td>
+          <td class="px-4 py-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-semibold rounded">${row.q7}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Vẽ biểu đồ
+    function updateCharts() {
+      const selectedQ = document.getElementById('question-select').value;
+      const counts = { A: 0, B: 0, C: 0, D: 0 };
+
+      responsesData.forEach(row => {
+        const val = row[selectedQ];
+        if (counts.hasOwnProperty(val)) {
+          counts[val]++;
         }
+      });
 
-        // Clear Local Data
-        function clearAllData() {
-            if (confirm("Bạn có chắc chắn muốn xóa toàn bộ dữ liệu khảo sát?")) {
-                localStorage.setItem('rareAnimalsSurveyResponses', JSON.stringify([]));
-                refreshAdminDashboard();
-                showToast('Đã xóa toàn bộ dữ liệu.', 'info');
-            }
-        }
+      const labels = ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'];
+      const data = [counts.A, counts.B, counts.C, counts.D];
+      const colors = ['#10b981', '#0284c7', '#f59e0b', '#ef4444'];
 
-        // Show Toast Notifications
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            const toastIcon = document.getElementById('toastIcon');
+      if (barChartInstance) barChartInstance.destroy();
+      if (doughnutChartInstance) doughnutChartInstance.destroy();
 
-            toastMsg.innerText = msg;
-            toastIcon.className = type === 'success' 
-                ? "fa-solid fa-circle-check text-emerald-400 text-lg" 
-                : "fa-solid fa-circle-info text-sky-400 text-lg";
+      const ctxBar = document.getElementById('barChart').getContext('2d');
+      barChartInstance = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Số chọn',
+            data: data,
+            backgroundColor: colors
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
 
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+      const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+      doughnutChartInstance = new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: colors
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    // Xuất CSV
+    function exportCSV() {
+      if (responsesData.length === 0) return alert("Không có dữ liệu để xuất!");
+      let csvContent = "\uFEFFSTT,Thoi gian,Q1,Q2,Q3,Q4,Q5,Q6,Q7\n";
+      responsesData.forEach((r, idx) => {
+        csvContent += `${responsesData.length - idx},"${r.created_at || ''}",${r.q1},${r.q2},${r.q3},${r.q4},${r.q5},${r.q6},${r.q7}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `danh_sach_khao_sat_van12.csv`;
+      a.click();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initTurso, 500);
+    });
+  </script>
 </body>
 </html>
