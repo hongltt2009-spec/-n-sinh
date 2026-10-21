@@ -178,7 +178,7 @@
             </div>
           </div>
 
-          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition duration-200 text-lg flex items-center justify-center gap-2">
+          <button type="submit" id="submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition duration-200 text-lg flex items-center justify-center gap-2">
             <i class="fa-solid fa-paper-plane"></i> Gửi Khảo Sát
           </button>
         </form>
@@ -187,7 +187,6 @@
 
     <!-- VIEW 2: ADMIN DASHBOARD -->
     <div id="admin-section" class="hidden space-y-6">
-      <!-- Cấu hình Turso Admin -->
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4 mb-4">
           <div>
@@ -195,11 +194,8 @@
             <h2 class="text-xl font-bold text-gray-800 mt-1">Bảng Điều Khiển & Thống Kê Turso</h2>
           </div>
           <div class="flex flex-wrap gap-2">
-            <button onclick="configureTurso()" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
-              <i class="fa-solid fa-gear"></i> Cấu hình Turso
-            </button>
             <button onclick="loadTursoData()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
-              <i class="fa-solid fa-rotate"></i> Tải lại Dữ liệu
+              <i class="fa-solid fa-rotate"></i> Đồng bộ Dữ liệu
             </button>
             <button onclick="exportCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
               <i class="fa-solid fa-file-csv"></i> Xuất CSV
@@ -235,8 +231,8 @@
               <i class="fa-solid fa-database text-2xl"></i>
             </div>
             <div>
-              <p class="text-xs text-gray-500 uppercase font-bold">Cơ sở dữ liệu</p>
-              <p class="text-lg font-bold text-amber-800">Turso Cloud</p>
+              <p class="text-xs text-gray-500 uppercase font-bold">Trạng thái CSDL</p>
+              <p id="db-status" class="text-lg font-bold text-emerald-600">Đã kết nối Turso</p>
             </div>
           </div>
         </div>
@@ -298,30 +294,31 @@
   </main>
 
   <script>
-    // Cấu hình chìa khóa mặc định Turso (Hoặc điền qua giao diện Admin)
-    let tursoUrl = localStorage.getItem('turso_url') || "";
-    let tursoToken = localStorage.getItem('turso_token') || "";
-    
+    // Điền trực tiếp Cấu hình Turso Database từ bạn cung cấp
+    const TURSO_URL = "libsql://data-lost-my-mind132-tn9lda.aws-ap-northeast-1.turso.io";
+    const TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTI1OTc5MjYsImlkIjoiMDFhMTVmMjktN2YwMS03MzUwLWEwYjctMTFkNmEzM2M0YTBmIiwia2lkIjoidjhkTUV0aTk4SE1aNDY4NTItNk0xZHpvZTJYazFMSDJOQzRmMThrU3QyWSIsInJpZCI6IjU3MWE4YWI5LThlZDktNDYzYy1iMWY1LTc3ODIxMWNkZTA1NSJ9.sSdyVZqcW6PTUkbT0rxjcydF6b3n8AfDOtkuXn6CjGR6b2IKAsP05ZOtmXt9mf-kCIlqMoUZiGOj4aY0u49JDQ";
+
     let dbClient = null;
     let responsesData = [];
     let barChartInstance = null;
     let doughnutChartInstance = null;
 
-    // Khởi tạo Client Turso
-    function initTurso() {
-      if (tursoUrl && tursoToken && window.createTursoClient) {
+    // Khởi tạo Turso Client
+    async function initTurso() {
+      if (window.createTursoClient) {
         try {
           dbClient = window.createTursoClient({
-            url: tursoUrl,
-            authToken: tursoToken
+            url: TURSO_URL,
+            authToken: TURSO_TOKEN
           });
-          createTableIfNotExists();
+          await createTableIfNotExists();
         } catch (e) {
-          console.error("Lỗi khởi tạo Turso Client:", e);
+          console.error("Lỗi kết nối Turso:", e);
         }
       }
     }
 
+    // Tự động tạo bảng nếu chưa có
     async function createTableIfNotExists() {
       if (!dbClient) return;
       try {
@@ -333,28 +330,11 @@
           );
         `);
       } catch (err) {
-        console.error("Không thể tạo bảng trên Turso:", err);
+        console.error("Không thể tạo bảng:", err);
       }
     }
 
-    // Yêu cầu nhập cấu hình Turso
-    function configureTurso() {
-      const url = prompt("Nhập Turso Database URL (libsql://...):", tursoUrl);
-      if (url === null) return;
-      const token = prompt("Nhập Turso Auth Token:", tursoToken);
-      if (token === null) return;
-
-      tursoUrl = url.trim();
-      tursoToken = token.trim();
-      localStorage.setItem('turso_url', tursoUrl);
-      localStorage.setItem('turso_token', tursoToken);
-
-      initTurso();
-      alert("Đã lưu cấu hình Turso thành công!");
-      loadTursoData();
-    }
-
-    // Đăng nhập Admin mật khẩu 11122009
+    // Đăng nhập Admin với mật khẩu 11122009
     function toggleAdminView() {
       const adminSection = document.getElementById('admin-section');
       const surveySection = document.getElementById('survey-section');
@@ -362,10 +342,6 @@
       if (adminSection.classList.contains('hidden')) {
         const password = prompt("Nhập mật khẩu Dev/Admin:");
         if (password === "11122009") {
-          if (!tursoUrl || !tursoToken) {
-            alert("Vui lòng cấu hình Turso Database URL và Token!");
-            configureTurso();
-          }
           surveySection.classList.add('hidden');
           adminSection.classList.remove('hidden');
           loadTursoData();
@@ -378,10 +354,14 @@
       }
     }
 
-    // Gửi khảo sát vào Turso
+    // Gửi khảo sát từ học sinh vào Database
     document.getElementById('survey-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi...`;
+
       const formData = new FormData(this);
       const q1 = formData.get('q1');
       const q2 = formData.get('q2');
@@ -391,9 +371,7 @@
       const q6 = formData.get('q6');
       const q7 = formData.get('q7');
 
-      if (!dbClient) {
-        initTurso();
-      }
+      if (!dbClient) await initTurso();
 
       if (dbClient) {
         try {
@@ -401,19 +379,22 @@
             sql: "INSERT INTO survey_responses (q1, q2, q3, q4, q5, q6, q7) VALUES (?, ?, ?, ?, ?, ?, ?)",
             args: [q1, q2, q3, q4, q5, q6, q7]
           });
-          alert("Cảm ơn bạn đã hoàn thành câu hỏi khảo sát!");
+          alert("Gửi bài làm thành công! Cảm ơn bạn đã tham gia khảo sát.");
           this.reset();
         } catch (err) {
-          alert("Lỗi khi gửi dữ liệu lên Turso: " + err.message);
+          alert("Có lỗi xảy ra khi gửi bài làm: " + err.message);
         }
       } else {
-        alert("Chưa kết nối Turso Database! Vui lòng cấu hình URL & Token trong menu Admin.");
+        alert("Chưa kết nối được cơ sở dữ liệu. Vui lòng thử lại!");
       }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Gửi Khảo Sát`;
     });
 
-    // Tải dữ liệu từ Turso về Admin
+    // Tải toàn bộ dữ liệu khảo sát từ Turso
     async function loadTursoData() {
-      if (!dbClient) initTurso();
+      if (!dbClient) await initTurso();
       if (!dbClient) return;
 
       try {
@@ -424,17 +405,17 @@
         renderTable();
         updateCharts();
       } catch (err) {
-        alert("Không thể tải dữ liệu từ Turso: " + err.message);
+        alert("Lỗi tải dữ liệu: " + err.message);
       }
     }
 
-    // Hiển thị Bảng
+    // Vẽ Bảng hiển thị
     function renderTable() {
       const tbody = document.getElementById('response-table-body');
       tbody.innerHTML = '';
 
       if (responsesData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-gray-400">Chưa có bài làm nào trong CSDL.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-gray-400">Chưa có bài làm nào trong cơ sở dữ liệu.</td></tr>`;
         return;
       }
 
@@ -456,16 +437,14 @@
       });
     }
 
-    // Vẽ biểu đồ
+    // Vẽ Biểu đồ
     function updateCharts() {
       const selectedQ = document.getElementById('question-select').value;
       const counts = { A: 0, B: 0, C: 0, D: 0 };
 
       responsesData.forEach(row => {
         const val = row[selectedQ];
-        if (counts.hasOwnProperty(val)) {
-          counts[val]++;
-        }
+        if (counts.hasOwnProperty(val)) counts[val]++;
       });
 
       const labels = ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'];
@@ -480,11 +459,7 @@
         type: 'bar',
         data: {
           labels: labels,
-          datasets: [{
-            label: 'Số chọn',
-            data: data,
-            backgroundColor: colors
-          }]
+          datasets: [{ label: 'Số chọn', data: data, backgroundColor: colors }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
       });
@@ -494,18 +469,15 @@
         type: 'doughnut',
         data: {
           labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: colors
-          }]
+          datasets: [{ data: data, backgroundColor: colors }]
         },
         options: { responsive: true, maintainAspectRatio: false }
       });
     }
 
-    // Xuất CSV
+    // Xuất file CSV tiếng Việt chuẩn
     function exportCSV() {
-      if (responsesData.length === 0) return alert("Không có dữ liệu để xuất!");
+      if (responsesData.length === 0) return alert("Chưa có dữ liệu để xuất!");
       let csvContent = "\uFEFFSTT,Thoi gian,Q1,Q2,Q3,Q4,Q5,Q6,Q7\n";
       responsesData.forEach((r, idx) => {
         csvContent += `${responsesData.length - idx},"${r.created_at || ''}",${r.q1},${r.q2},${r.q3},${r.q4},${r.q5},${r.q6},${r.q7}\n`;
@@ -515,12 +487,13 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `danh_sach_khao_sat_van12.csv`;
+      a.download = `khao_sat_ngu_van_12.csv`;
       a.click();
     }
 
+    // Khởi tạo kết nối khi load trang
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(initTurso, 500);
+      setTimeout(initTurso, 400);
     });
   </script>
 </body>
